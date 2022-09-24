@@ -1,2 +1,4 @@
-# leti_ads
-Algorithms and data structures course.
+# Лабораторные работы по курсу "Алгоритмы и структуры данных"
+
+## Лабораторная №1. Списочные структуры
+Задание: https://gravel-battery-806.notion.site/2f9d1362a9694099b8c412e4968e7957
