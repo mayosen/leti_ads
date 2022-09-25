@@ -233,7 +233,7 @@ public class SinglyLinkedListTest {
         assertEquals(list, other);
     }
 
-    // TODO: Тест с другой реализацией List
+    // TODO: Тест на сравнение разных реализаций List
 
     @Test
     public void sortEmpty() {

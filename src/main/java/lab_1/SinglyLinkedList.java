@@ -1,6 +1,8 @@
 package lab_1;
 
-public class SinglyLinkedList<E extends Comparable<E>> implements List<E> {
+import java.util.EmptyStackException;
+
+public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack<E> {
     private int size;
     private Node head;
 
@@ -260,6 +262,38 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E> {
                 return;
             }
         }
+    }
+
+    @Override
+    public E push(E item) {
+        Node newNode = new Node(item);
+        newNode.next = head;
+        head = newNode;
+        size++;
+
+        return item;
+    }
+
+    @Override
+    public E pop() {
+        if (size == 0) {
+            throw new EmptyStackException();
+        }
+
+        E item = head.data;
+        head = head.next;
+        size--;
+
+        return item;
+    }
+
+    @Override
+    public E peek() {
+        if (size == 0) {
+            throw new EmptyStackException();
+        }
+
+        return head.data;
     }
 
     @Override
