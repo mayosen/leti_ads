@@ -7,6 +7,8 @@ public interface List<E extends Comparable<E>> {
 
     void add(E e);
 
+    void add(int index, E e);
+
     boolean remove(Object e);
 
     boolean remove(int index);

@@ -269,7 +269,7 @@ public class ArrayListTest {
     }
 
     @Test
-    public void sortAeArrayList() {
+    public void sortSingle() {
         List<Integer> list = new ArrayList<>();
         list.add(4);
         assertDoesNotThrow(list::sort);
@@ -328,6 +328,45 @@ public class ArrayListTest {
         List<Integer> list = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         list.sort();
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    public void insertToInvalidIndex() {
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        assertThrows(IndexOutOfBoundsException.class, () -> list.add(-1, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.add(17, 0));
+    }
+
+    @Test
+    public void insertToHead() {
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        list.add(0, 0);
+        List<Integer> expected = new ArrayList<>(new Integer[]{0, 10, 20, 30, 40, 50});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    public void insertToMiddle() {
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        list.add(2, 0);
+        List<Integer> expected = new ArrayList<>(new Integer[]{10, 20, 0, 30, 40, 50});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    public void insertToLast() {
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        list.add(4, 0);
+        List<Integer> expected = new ArrayList<>(new Integer[]{10, 20, 30, 40, 0, 50});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    public void appendToEnd() {
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        list.add(5, 0);
+        List<Integer> expected = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50, 0});
         assertEquals(expected, list);
     }
 }

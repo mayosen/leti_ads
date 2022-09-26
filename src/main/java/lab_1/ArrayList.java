@@ -1,7 +1,5 @@
 package lab_1;
 
-import java.util.Arrays;
-
 public class ArrayList<E extends Comparable<E>> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] array = new Object[DEFAULT_CAPACITY];
@@ -42,6 +40,18 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
     }
 
     @Override
+    public void add(int index, E e) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        ensureCapacity(size + 1);
+        Arrays.arrayCopy(array, index, array, index + 1, size - index);
+        array[index] = e;
+        size++;
+    }
+
+    @Override
     public boolean remove(Object e) {
         int index = indexOf(e);
 
@@ -61,7 +71,7 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
     }
 
     private void removeInternally(int index) {
-        System.arraycopy(array, index + 1, array, index, size - 1 - index);
+        Arrays.arrayCopy(array, index + 1, array, index, size - 1 - index);
         array[size - 1] = null;
         size--;
     }
@@ -135,37 +145,43 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
      */
     @Override
     public void sort() {
-        quickSort(0, size - 1);
+        if (size > 0) {
+            quickSort(0, size - 1);
+        }
     }
 
     private void quickSort(int start, int end) {
-        if (start < end) {
-            int partition = partition(start, end);
-            quickSort(start, partition - 1);
-            quickSort(partition + 1, end);
-        }
-    }
+        int left = start;
+        int right = end;
+        E pivot = arrayItem((left + right) / 2);
 
-    private int partition(int start, int end) {
-        E pivot = arrayItem(end);
-        int swapPosition = start;
-
-        for (int i = start; i < end; i++) {
-            if (arrayItem(i).compareTo(pivot) <= 0) {
-                swapElements(swapPosition, i);
-                swapPosition++;
+        do {
+            while (arrayItem(left).compareTo(pivot) < 0) {
+                left++;
             }
+
+            while (arrayItem(right).compareTo(pivot) > 0) {
+                right--;
+            }
+
+            if (left <= right) {
+                if (left < right) {
+                    Object temp = array[left];
+                    array[left] = array[right];
+                    array[right] = temp;
+                }
+                left++;
+                right--;
+            }
+        } while (left <= right);
+
+        if (left < end) {
+            quickSort(left, end);
         }
 
-        swapElements(swapPosition, end);
-
-        return swapPosition;
-    }
-
-    private void swapElements(int a, int b) {
-        Object temp = array[a];
-        array[a] = b;
-        array[b] = temp;
+        if (start < right) {
+            quickSort(start, right);
+        }
     }
 
     @Override
