@@ -4,30 +4,45 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SinglyLinkedListTest {
+public class ArrayListTest {
     @Test
-    public void createIntegerList() {
-        List<Integer> list = new SinglyLinkedList<>();
+    public void createEmpty() {
+        List<Integer> list = new ArrayList<>();
         assertTrue(list.isEmpty());
         assertEquals(0, list.size());
-
-        list.add(2);
-        assertFalse(list.isEmpty());
-        assertEquals(1, list.size());
-
-        list.add(3);
-        assertFalse(list.isEmpty());
-        assertEquals(2, list.size());
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(0));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.set(0, Integer.valueOf(14)));
     }
 
     @Test
     public void createFromArray() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 2, 3});
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 15, 20});
+        assertFalse(list.isEmpty());
         assertEquals(3, list.size());
     }
 
+    @Test
+    public void addElements() {
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 2 ,3});
+        list.add(10);
+        assertEquals(4, list.size());
+        list.add(20);
+        assertEquals(5, list.size());
+    }
+
+    @Test
+    public void addGreaterThanDefaultCapacityCountOfElements() {
+        List<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            list.add(i);
+        }
+
+        assertEquals(100, list.size());
+    }
+
     private List<Integer> generateSampleList() {
-        return new SinglyLinkedList<>(new Integer[]{10, 5, 0, 888});
+        return new ArrayList<>(new Integer[]{10, 5, 0, 888});
     }
 
     @Test
@@ -42,7 +57,7 @@ public class SinglyLinkedListTest {
         List<Integer> list = generateSampleList();
         assertTrue(list.remove(Integer.valueOf(10)));
         assertEquals(3, list.size());
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{5, 0, 888});
+        List<Integer> expected = new ArrayList<>(new Integer[]{5, 0, 888});
         assertEquals(expected, list);
     }
 
@@ -51,13 +66,13 @@ public class SinglyLinkedListTest {
         List<Integer> list = generateSampleList();
         assertTrue(list.remove(Integer.valueOf(0)));
         assertEquals(3, list.size());
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10, 5, 888});
+        List<Integer> expected = new ArrayList<>(new Integer[]{10, 5, 888});
         assertEquals(expected, list);
     }
 
     @Test
     public void removeFromEmptyList() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertFalse(list.remove(Integer.valueOf(0)));
         assertEquals(0, list.size());
     }
@@ -71,7 +86,7 @@ public class SinglyLinkedListTest {
 
     @Test
     public void removeByIndexFromEmptyList() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertThrows(IndexOutOfBoundsException.class, () -> list.remove(0));
     }
 
@@ -80,7 +95,7 @@ public class SinglyLinkedListTest {
         List<Integer> list = generateSampleList();
         assertTrue(list.remove(0));
         assertEquals(3, list.size());
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{5, 0, 888});
+        List<Integer> expected = new ArrayList<>(new Integer[]{5, 0, 888});
         assertEquals(expected, list);
     }
 
@@ -89,13 +104,13 @@ public class SinglyLinkedListTest {
         List<Integer> list = generateSampleList();
         assertTrue(list.remove(2));
         assertEquals(3, list.size());
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10, 5, 888});
+        List<Integer> expected = new ArrayList<>(new Integer[]{10, 5, 888});
         assertEquals(expected, list);
     }
 
     @Test
     public void getFromEmpty() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertThrows(IndexOutOfBoundsException.class, () -> list.get(0));
     }
 
@@ -139,7 +154,7 @@ public class SinglyLinkedListTest {
 
     @Test
     public void emptyListContains() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertFalse(list.contains(Integer.valueOf(1)));
     }
 
@@ -163,7 +178,7 @@ public class SinglyLinkedListTest {
 
     @Test
     public void indexFromEmptyList() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertEquals(-1, list.indexOf(Integer.valueOf(1)));
     }
 
@@ -181,14 +196,14 @@ public class SinglyLinkedListTest {
 
     @Test
     public void clearEmptyList() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         list.clear();
         assertEquals(0, list.size());
     }
 
     @Test
-    public void clearListWithSingle() {
-        List<Integer> list = new SinglyLinkedList<>();
+    public void clearListWithAeArrayList() {
+        List<Integer> list = new ArrayList<>();
         list.add(12);
         list.clear();
         assertEquals(0, list.size());
@@ -203,7 +218,7 @@ public class SinglyLinkedListTest {
 
     @Test
     public void equalsEmptyToSelf() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertEquals(list, list);
     }
 
@@ -221,98 +236,98 @@ public class SinglyLinkedListTest {
 
     @Test
     public void notEqualsToDifferentSizeEmpty() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 2, 3});
-        List<Integer> other = new SinglyLinkedList<>(new Integer[]{});
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3});
+        List<Integer> other = new ArrayList<>(new Integer[]{});
         assertNotEquals(list, other);
     }
 
     @Test
     public void notEqualsToDifferentSize() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 2, 3});
-        List<Integer> other = new SinglyLinkedList<>(new Integer[]{10, 10, 10, 10, 10});
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3});
+        List<Integer> other = new ArrayList<>(new Integer[]{10, 10, 10, 10, 10});
         assertNotEquals(list, other);
     }
 
     @Test
     public void notEqualsToDifferentList() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{11, 12, 13, 14, 15});
-        List<Integer> other = new SinglyLinkedList<>(new Integer[]{11, 12, 13, 13, 15});
+        List<Integer> list = new ArrayList<>(new Integer[]{11, 12, 13, 14, 15});
+        List<Integer> other = new ArrayList<>(new Integer[]{11, 12, 13, 13, 15});
         assertNotEquals(list, other);
     }
 
     @Test
     public void equalsToSameList() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{11, 12, 13, 14, 15});
-        List<Integer> other = new SinglyLinkedList<>(new Integer[]{11, 12, 13, 14, 15});
+        List<Integer> list = new ArrayList<>(new Integer[]{11, 12, 13, 14, 15});
+        List<Integer> other = new ArrayList<>(new Integer[]{11, 12, 13, 14, 15});
         assertEquals(list, other);
     }
 
     @Test
     public void sortEmpty() {
-        List<Integer> list = new SinglyLinkedList<>();
+        List<Integer> list = new ArrayList<>();
         assertDoesNotThrow(list::sort);
     }
 
     @Test
-    public void sortSingle() {
-        List<Integer> list = new SinglyLinkedList<>();
+    public void sortAeArrayList() {
+        List<Integer> list = new ArrayList<>();
         list.add(4);
         assertDoesNotThrow(list::sort);
     }
 
     @Test
     public void sort2Ordered() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 10});
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 10});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 10});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 10});
         assertEquals(expected, list);
     }
 
     @Test
     public void sort2Unordered() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{10, 1});
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 1});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 10});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 10});
         assertEquals(expected, list);
     }
 
     @Test
     public void sort3Unordered() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{10, 1, 13});
+        List<Integer> list = new ArrayList<>(new Integer[]{10, 1, 13});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 10, 13});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 10, 13});
         assertEquals(expected, list);
     }
 
     @Test
     public void sort3Ordered() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 10, 13});
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 10, 13});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 10, 13});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 10, 13});
         assertEquals(expected, list);
     }
 
     @Test
     public void sortWithIterations() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{0, 14, 6, 5, 2});
+        List<Integer> list = new ArrayList<>(new Integer[]{0, 14, 6, 5, 2});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{0, 2, 5, 6, 14});
+        List<Integer> expected = new ArrayList<>(new Integer[]{0, 2, 5, 6, 14});
         assertEquals(expected, list);
     }
 
     @Test
     public void sortComplex() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{8, 1, 4, 3, 2, 100, 1});
+        List<Integer> list = new ArrayList<>(new Integer[]{8, 1, 4, 3, 2, 100, 1});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         assertEquals(expected, list);
     }
 
     @Test
     public void sortComplexAlreadySorted() {
-        List<Integer> list = new SinglyLinkedList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         list.sort();
-        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         assertEquals(expected, list);
     }
 }

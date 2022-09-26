@@ -3,18 +3,15 @@ package lab_1;
 import java.util.EmptyStackException;
 
 public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack<E> {
-    private int size;
+    private int size = 0;
     private Node head;
 
-    public SinglyLinkedList() {
-        size = 0;
-    }
+    public SinglyLinkedList() { }
 
-    public SinglyLinkedList(E[] array) {
-        for (E e : array) {
+    public SinglyLinkedList(E[] elements) {
+        for (E e : elements) {
             add(e);
         }
-        size = array.length;
     }
 
     private class Node {
@@ -141,25 +138,18 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
     }
 
     @Override
-    public boolean contains(Object e) {
-        return indexOf(e) != -1;
-    }
-
-    @Override
     public int indexOf(Object e) {
         Node current = head;
-        Node target = null;
         int index;
 
         for (index = 0; index < size; index++) {
             if (current.data.equals(e)) {
-                target = current;
-                break;
+                return index;
             }
             current = current.next;
         }
 
-        return target != null ? index : -1;
+        return -1;
     }
 
     @Override

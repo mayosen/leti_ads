@@ -15,13 +15,13 @@ public interface List<E extends Comparable<E>> {
 
     E set(int index, E e);
 
-    boolean contains(Object e);
+    default boolean contains(Object e) {
+        return indexOf(e) != -1;
+    }
 
     int indexOf(Object e);
 
     void clear();
-
-    boolean equals(Object o);
 
     /**
      * Сортировка элементов в естественном порядке.
