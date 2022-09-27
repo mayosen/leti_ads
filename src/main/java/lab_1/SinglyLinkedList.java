@@ -292,7 +292,10 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
         }
 
         E item = head.data;
-        head = head.next;
+        Node newHead = head.next;
+        head.data = null;
+        head.next = null;
+        head = newHead;
         size--;
 
         return item;
