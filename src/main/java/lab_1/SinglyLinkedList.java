@@ -18,8 +18,9 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
         E data;
         Node next;
 
-        public Node(E data) {
+        public Node(E data, Node next) {
             this.data = data;
+            this.next = next;
         }
 
         @Override
@@ -43,13 +44,13 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
     @Override
     public void add(E e) {
         if (head == null) {
-            head = new Node(e);
+            head = new Node(e, null);
         } else {
             Node current = head;
             while (current.next != null) {
                 current = current.next;
             }
-            current.next = new Node(e);
+            current.next = new Node(e, null);
         }
 
         size++;
@@ -61,7 +62,7 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
             throw new IndexOutOfBoundsException();
         }
 
-        Node newNode = new Node(e);
+        Node newNode = new Node(e, null);
         Node previous = null;
         Node current = head;
 
