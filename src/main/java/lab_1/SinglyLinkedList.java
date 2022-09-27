@@ -1,8 +1,9 @@
 package lab_1;
 
+import java.util.Comparator;
 import java.util.EmptyStackException;
 
-public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack<E> {
+public class SinglyLinkedList<E> implements List<E>, Stack<E> {
     private int size = 0;
     private Node head;
 
@@ -18,8 +19,9 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
         E data;
         Node next;
 
-        public Node(E data) {
+        public Node(E data, Node next) {
             this.data = data;
+            this.next = next;
         }
 
         @Override
@@ -43,13 +45,13 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
     @Override
     public void add(E e) {
         if (head == null) {
-            head = new Node(e);
+            head = new Node(e, null);
         } else {
             Node current = head;
             while (current.next != null) {
                 current = current.next;
             }
-            current.next = new Node(e);
+            current.next = new Node(e, null);
         }
 
         size++;
@@ -61,7 +63,7 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
             throw new IndexOutOfBoundsException();
         }
 
-        Node newNode = new Node(e);
+        Node newNode = new Node(e, null);
         Node previous = null;
         Node current = head;
 
@@ -163,11 +165,15 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
     }
 
     @Override
+    public boolean contains(Object e) {
+        return indexOf(e) != -1;
+    }
+
+    @Override
     public int indexOf(Object e) {
         Node current = head;
-        int index;
 
-        for (index = 0; index < size; index++) {
+        for (int index = 0; index < size; index++) {
             if (current.data.equals(e)) {
                 return index;
             }
@@ -245,7 +251,7 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
      * Сортировка пузырьком.
      */
     @Override
-    public void sort() {
+    public void sort(Comparator<E> comparator) {
         for (int i = 0; i < size - 1; i++) {
             Node secondPrevious = null;
             Node previous = head;
@@ -253,7 +259,7 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
             boolean changed = false;
 
             while (current != null) {
-                if (previous.data.compareTo(current.data) > 0) {
+                if (comparator.compare(previous.data, current.data) > 0) {
                     if (previous == head) {
                         previous.next = current.next;
                         head = current;
@@ -292,7 +298,10 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
         }
 
         E item = head.data;
-        head = head.next;
+        Node newHead = head.next;
+        head.data = null;
+        head.next = null;
+        head = newHead;
         size--;
 
         return item;

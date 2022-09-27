@@ -2,6 +2,8 @@ package lab_1;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArrayListTest {
@@ -262,23 +264,25 @@ public class ArrayListTest {
         assertEquals(list, other);
     }
 
+    Comparator<Integer> comparator = Integer::compare;
+
     @Test
     public void sortEmpty() {
         List<Integer> list = new ArrayList<>();
-        assertDoesNotThrow(list::sort);
+        assertDoesNotThrow(() -> list.sort(comparator));
     }
 
     @Test
     public void sortSingle() {
         List<Integer> list = new ArrayList<>();
         list.add(4);
-        assertDoesNotThrow(list::sort);
+        assertDoesNotThrow(() -> list.sort(comparator));
     }
 
     @Test
     public void sort2Ordered() {
         List<Integer> list = new ArrayList<>(new Integer[]{1, 10});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 10});
         assertEquals(expected, list);
     }
@@ -286,7 +290,7 @@ public class ArrayListTest {
     @Test
     public void sort2Unordered() {
         List<Integer> list = new ArrayList<>(new Integer[]{10, 1});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 10});
         assertEquals(expected, list);
     }
@@ -294,7 +298,7 @@ public class ArrayListTest {
     @Test
     public void sort3Unordered() {
         List<Integer> list = new ArrayList<>(new Integer[]{10, 1, 13});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 10, 13});
         assertEquals(expected, list);
     }
@@ -302,7 +306,7 @@ public class ArrayListTest {
     @Test
     public void sort3Ordered() {
         List<Integer> list = new ArrayList<>(new Integer[]{1, 10, 13});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 10, 13});
         assertEquals(expected, list);
     }
@@ -310,7 +314,7 @@ public class ArrayListTest {
     @Test
     public void sortWithIterations() {
         List<Integer> list = new ArrayList<>(new Integer[]{0, 14, 6, 5, 2});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{0, 2, 5, 6, 14});
         assertEquals(expected, list);
     }
@@ -318,7 +322,7 @@ public class ArrayListTest {
     @Test
     public void sortComplex() {
         List<Integer> list = new ArrayList<>(new Integer[]{8, 1, 4, 3, 2, 100, 1});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         assertEquals(expected, list);
     }
@@ -326,7 +330,7 @@ public class ArrayListTest {
     @Test
     public void sortComplexAlreadySorted() {
         List<Integer> list = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
-        list.sort();
+        list.sort(comparator);
         List<Integer> expected = new ArrayList<>(new Integer[]{1, 1, 2, 3, 4, 8, 100});
         assertEquals(expected, list);
     }

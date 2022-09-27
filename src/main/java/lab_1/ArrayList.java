@@ -1,11 +1,20 @@
 package lab_1;
 
-public class ArrayList<E extends Comparable<E>> implements List<E> {
-    private static final int DEFAULT_CAPACITY = 10;
-    private Object[] array = new Object[DEFAULT_CAPACITY];
-    private int size = 0;
+import java.util.Comparator;
 
-    public ArrayList() { }
+public class ArrayList<E> implements List<E> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private Object[] array;
+    private int size = 0;
+    private Comparator<E> comparator;
+
+    public ArrayList() {
+        array = new Object[DEFAULT_CAPACITY];
+    }
+
+    public ArrayList(int capacity) {
+        array = new Object[capacity];
+    }
 
     public ArrayList(E[] elements) {
         ensureCapacity(elements.length);
@@ -101,6 +110,11 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
     }
 
     @Override
+    public boolean contains(Object e) {
+        return indexOf(e) != -1;
+    }
+
+    @Override
     public int indexOf(Object e) {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(e)) {
@@ -144,7 +158,8 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
      * Быстрая сортировка.
      */
     @Override
-    public void sort() {
+    public void sort(Comparator<E> comparator) {
+        this.comparator = comparator;
         if (size > 0) {
             quickSort(0, size - 1);
         }
@@ -156,11 +171,11 @@ public class ArrayList<E extends Comparable<E>> implements List<E> {
         E pivot = arrayItem((left + right) / 2);
 
         do {
-            while (arrayItem(left).compareTo(pivot) < 0) {
+            while (comparator.compare(arrayItem(left), pivot) < 0) {
                 left++;
             }
 
-            while (arrayItem(right).compareTo(pivot) > 0) {
+            while (comparator.compare(arrayItem(right), pivot) > 0) {
                 right--;
             }
 

@@ -1,6 +1,8 @@
 package lab_1;
 
-public interface List<E extends Comparable<E>> {
+import java.util.Comparator;
+
+public interface List<E> {
     int size();
 
     boolean isEmpty();
@@ -17,16 +19,11 @@ public interface List<E extends Comparable<E>> {
 
     E set(int index, E e);
 
-    default boolean contains(Object e) {
-        return indexOf(e) != -1;
-    }
+    boolean contains(Object e);
 
     int indexOf(Object e);
 
     void clear();
 
-    /**
-     * Сортировка элементов в естественном порядке.
-     */
-    void sort();
+    void sort(Comparator<E> comparator);
 }
