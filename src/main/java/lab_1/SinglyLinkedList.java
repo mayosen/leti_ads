@@ -166,9 +166,8 @@ public class SinglyLinkedList<E extends Comparable<E>> implements List<E>, Stack
     @Override
     public int indexOf(Object e) {
         Node current = head;
-        int index;
 
-        for (index = 0; index < size; index++) {
+        for (int index = 0; index < size; index++) {
             if (current.data.equals(e)) {
                 return index;
             }
