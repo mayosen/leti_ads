@@ -1,5 +1,6 @@
 package lab_1;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
@@ -7,6 +8,14 @@ import java.util.Comparator;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArrayListTest {
+    private final Comparator<Integer> comparator = Integer::compare;
+    private List<Integer> sampleList;
+
+    @BeforeEach
+    public void generateSampleList() {
+        sampleList = new ArrayList<>(new Integer[]{10, 5, 0, 888});
+    }
+
     @Test
     public void createEmpty() {
         List<Integer> list = new ArrayList<>();
@@ -21,14 +30,19 @@ public class ArrayListTest {
         List<Integer> list = new ArrayList<>(new Integer[]{10, 15, 20});
         assertFalse(list.isEmpty());
         assertEquals(3, list.size());
+        assertTrue(list.contains(10));
+        assertTrue(list.contains(15));
+        assertTrue(list.contains(20));
     }
 
     @Test
     public void addElements() {
         List<Integer> list = new ArrayList<>(new Integer[]{1, 2 ,3});
         list.add(10);
+        assertTrue(list.contains(10));
         assertEquals(4, list.size());
         list.add(20);
+        assertTrue(list.contains(20));
         assertEquals(5, list.size());
     }
 
@@ -43,20 +57,16 @@ public class ArrayListTest {
         assertEquals(100, list.size());
     }
 
-    private List<Integer> generateSampleList() {
-        return new ArrayList<>(new Integer[]{10, 5, 0, 888});
-    }
-
     @Test
     public void removeByNotExistingObject() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertFalse(list.remove(Integer.valueOf(3)));
         assertEquals(4, list.size());
     }
 
     @Test
     public void removeHeadByObject() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.remove(Integer.valueOf(10)));
         assertEquals(3, list.size());
         List<Integer> expected = new ArrayList<>(new Integer[]{5, 0, 888});
@@ -65,7 +75,7 @@ public class ArrayListTest {
 
     @Test
     public void removeMiddleByObject() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.remove(Integer.valueOf(0)));
         assertEquals(3, list.size());
         List<Integer> expected = new ArrayList<>(new Integer[]{10, 5, 888});
@@ -81,7 +91,7 @@ public class ArrayListTest {
 
     @Test
     public void removeByInvalidIndex() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertThrows(IndexOutOfBoundsException.class, () -> list.remove(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> list.remove(4));
     }
@@ -94,7 +104,7 @@ public class ArrayListTest {
 
     @Test
     public void removeHeadByIndex() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.remove(0));
         assertEquals(3, list.size());
         List<Integer> expected = new ArrayList<>(new Integer[]{5, 0, 888});
@@ -103,7 +113,7 @@ public class ArrayListTest {
 
     @Test
     public void removeMiddleByIndex() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.remove(2));
         assertEquals(3, list.size());
         List<Integer> expected = new ArrayList<>(new Integer[]{10, 5, 888});
@@ -118,38 +128,38 @@ public class ArrayListTest {
 
     @Test
     public void getByInvalidIndex() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertThrows(IndexOutOfBoundsException.class, () -> list.get(4));
     }
 
     @Test
     public void getHead() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(10, list.get(0).intValue());
     }
 
     @Test
     public void getMiddle() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(888, list.get(3).intValue());
     }
 
     @Test
     public void setByInvalidIndex() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertThrows(IndexOutOfBoundsException.class, () -> list.set(4, 1000));
     }
 
     @Test
     public void setHead() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(10, list.set(0, 228).intValue());
         assertEquals(228, list.get(0).intValue());
     }
 
     @Test
     public void setMiddle() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(0, list.set(2, 228).intValue());
         assertEquals(228, list.get(2).intValue());
     }
@@ -162,19 +172,19 @@ public class ArrayListTest {
 
     @Test
     public void listNotContains() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertFalse(list.contains(Integer.valueOf(111)));
     }
 
     @Test
     public void listContainsHead() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.contains(Integer.valueOf(10)));
     }
 
     @Test
     public void listContainsMiddle() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertTrue(list.contains(Integer.valueOf(0)));
     }
 
@@ -186,13 +196,13 @@ public class ArrayListTest {
 
     @Test
     public void indexOfHead() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(0, list.indexOf(Integer.valueOf(10)));
     }
 
     @Test
     public void indexOfMiddle() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(3, list.indexOf(Integer.valueOf(888)));
     }
 
@@ -213,7 +223,7 @@ public class ArrayListTest {
 
     @Test
     public void clearSampleList() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         list.clear();
         assertEquals(0, list.size());
     }
@@ -226,13 +236,13 @@ public class ArrayListTest {
 
     @Test
     public void equalsToSelf() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertEquals(list, list);
     }
 
     @Test
     public void notEqualsToNull() {
-        List<Integer> list = generateSampleList();
+        List<Integer> list = sampleList;
         assertNotEquals(list, null);
     }
 
@@ -263,8 +273,6 @@ public class ArrayListTest {
         List<Integer> other = new ArrayList<>(new Integer[]{11, 12, 13, 14, 15});
         assertEquals(list, other);
     }
-
-    Comparator<Integer> comparator = Integer::compare;
 
     @Test
     public void sortEmpty() {
@@ -372,5 +380,10 @@ public class ArrayListTest {
         list.add(5, 0);
         List<Integer> expected = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50, 0});
         assertEquals(expected, list);
+    }
+
+    @Test
+    public void createWithInvalidCapacity() {
+        assertThrows(IllegalArgumentException.class, () -> new ArrayList<>(-1));
     }
 }

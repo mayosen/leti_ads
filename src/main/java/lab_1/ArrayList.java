@@ -13,10 +13,15 @@ public class ArrayList<E> implements List<E> {
     }
 
     public ArrayList(int capacity) {
-        array = new Object[capacity];
+        if (capacity < 0) {
+            throw new IllegalArgumentException();
+        }
+        int finalCapacity = Math.max(DEFAULT_CAPACITY, capacity);
+        array = new Object[finalCapacity];
     }
 
     public ArrayList(E[] elements) {
+        array = new Object[DEFAULT_CAPACITY];
         ensureCapacity(elements.length);
 
         for (E e : elements) {

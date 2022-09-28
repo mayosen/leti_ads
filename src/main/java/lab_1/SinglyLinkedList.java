@@ -195,6 +195,7 @@ public class SinglyLinkedList<E> implements List<E>, Stack<E> {
             current = next;
         }
 
+        head = null;
         size = 0;
     }
 
