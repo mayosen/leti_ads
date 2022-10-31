@@ -29,14 +29,6 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    public ArrayList<E> subList(int from, int to) {
-        int length = to - from;
-        ArrayList<E> created = new ArrayList<>(length);
-        Arrays.arrayCopy(array, from, created.array, 0, length);
-        created.size = length;
-        return created;
-    }
-
     private void ensureCapacity(int requiredElementsCount) {
         if (array.length < requiredElementsCount) {
             int capacity = Math.max(DEFAULT_CAPACITY, requiredElementsCount + (requiredElementsCount >> 1));
@@ -212,19 +204,27 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
+    public ArrayList<E> subList(int from, int to) {
+        int length = to - from;
+        ArrayList<E> created = new ArrayList<>(length);
+        Arrays.arrayCopy(array, from, created.array, 0, length);
+        created.size = length;
+        return created;
+    }
+
+    public void reverse() {
+        for (int left = 0; left < size / 2; left++) {
+            int right = size - left - 1;
+            Object temp = array[left];
+            array[left] = array[right];
+            array[right] = temp;
+        }
+    }
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ArrayList{size=");
-        builder.append(size);
-        builder.append(", array=[");
-        for (int i = 0; i < size; i++) {
-            builder.append(array[i]);
-            if (i != size - 1) {
-                builder.append(", ");
-            }
-        }
-        builder.append("]}");
-        return builder.toString();
+        return "ArrayList{" +
+                "size=" + size +
+                '}';
     }
 }
