@@ -386,4 +386,35 @@ public class ArrayListTest {
     public void createWithInvalidCapacity() {
         assertThrows(IllegalArgumentException.class, () -> new ArrayList<>(-1));
     }
+
+    @Test
+    public void subListFull() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        ArrayList<Integer> copy = source.subList(0, source.size());
+        assertEquals(source, copy);
+    }
+
+    @Test
+    public void subListStarts() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        ArrayList<Integer> copy = source.subList(0, 3);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{10, 20, 30});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListEnds() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        ArrayList<Integer> copy = source.subList(2, source.size());
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{30, 40, 50});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListMiddle() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{10, 20, 30, 40, 50});
+        ArrayList<Integer> copy = source.subList(2, 3);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{30});
+        assertEquals(expected, copy);
+    }
 }

@@ -29,6 +29,14 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
+    public ArrayList<E> subList(int from, int to) {
+        int length = to - from;
+        ArrayList<E> created = new ArrayList<>(length);
+        Arrays.arrayCopy(array, from, created.array, 0, length);
+        created.size = length;
+        return created;
+    }
+
     private void ensureCapacity(int requiredElementsCount) {
         if (array.length < requiredElementsCount) {
             int capacity = Math.max(DEFAULT_CAPACITY, requiredElementsCount + (requiredElementsCount >> 1));
