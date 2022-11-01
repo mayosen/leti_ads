@@ -149,4 +149,36 @@ class TimSortTest {
         });
         assertEquals(expected, merge(left, right, cmp));
     }
+
+    @Test
+    public void reverseEmpty() {
+        ArrayList<Integer> source = new ArrayList<>();
+        reverse(source, 0, 0);
+        ArrayList<Integer> expected = new ArrayList<>();
+        assertEquals(expected, source);
+    }
+
+    @Test
+    public void reverseSingleItem() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1});
+        reverse(source, 0, 1);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1});
+        assertEquals(expected, source);
+    }
+
+    @Test
+    public void reverseEvenSize() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1, 2, 3, 4});
+        reverse(source, 0, 4);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{4, 3, 2, 1});
+        assertEquals(expected, source);
+    }
+
+    @Test
+    public void reverseOddSize() {
+        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5});
+        reverse(source, 0, 5);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{5, 4, 3, 2, 1});
+        assertEquals(expected, source);
+    }
 }
