@@ -32,12 +32,6 @@ public class ArrayList<E> implements List<E>, Stack<E> {
         }
     }
 
-    public ArrayList(ArrayList<E> other) {
-        array = Arrays.copyOf(other.array, other.array.length);
-        size = other.size;
-        comparator = other.comparator;
-    }
-
     private void ensureCapacity(int requiredElementsCount) {
         if (array.length < requiredElementsCount) {
             int capacity = Math.max(DEFAULT_CAPACITY, requiredElementsCount + (requiredElementsCount >> 1));
