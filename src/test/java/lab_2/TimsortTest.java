@@ -5,33 +5,33 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 
-import static lab_2.Timsort.*;
+import static lab_2.TimSort.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TimsortTest {
+class TimSortTest {
     private final Comparator<Integer> cmp = Integer::compare;
 
-    private void printMinrun(int value) {
-        System.out.format("minrun for %d = %d\n", value, getMinRun(value));
+    private void printMinRun(int value) {
+        System.out.format("minRun for %d = %d\n", value, getMinRun(value));
     }
 
     @Test
-    void minrun() {
-        printMinrun(1);
-        printMinrun(2);
-        printMinrun(3);
-        printMinrun(4);
-        printMinrun(32);
-        printMinrun(45);
-        printMinrun(64);
-        printMinrun(100);
-        printMinrun(269);
-        printMinrun(356);
-        printMinrun(1_000);
-        printMinrun(1_000_000);
-        printMinrun(10_000_000);
-        printMinrun(100_000_000);
-        printMinrun(1_000_000_000);
+    void minRun() {
+        printMinRun(1);
+        printMinRun(2);
+        printMinRun(3);
+        printMinRun(4);
+        printMinRun(32);
+        printMinRun(45);
+        printMinRun(64);
+        printMinRun(100);
+        printMinRun(269);
+        printMinRun(356);
+        printMinRun(1_000);
+        printMinRun(1_000_000);
+        printMinRun(10_000_000);
+        printMinRun(100_000_000);
+        printMinRun(1_000_000_000);
     }
 
     @Test
@@ -39,7 +39,7 @@ class TimsortTest {
         ArrayList<Integer> list = new ArrayList<>(new Integer[]{
                 1, 2, 3, 25, 23, 35, 4, 5, 7, 9, 13, 6, 8, 7, 6, 5, 4, 3, 2, 1
         });
-        timsort(list, cmp);
+        timSort(list, cmp);
     }
 
     @Test

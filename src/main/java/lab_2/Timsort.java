@@ -7,11 +7,11 @@ import java.util.Comparator;
 
 import static lab_2.InsertionSort.insertionSort;
 
-public class Timsort {
-    private static final int GALLOPING_STEP = 7;
+public class TimSort {
+    private static final int GALLOP_LENGTH = 7;
 
-    public static <T> ArrayList<T> timsort(ArrayList<T> list, Comparator<T> cmp) {
-        int minRun = getMinRun(list.size());  // TODO: Применять minRun
+    public static <T> ArrayList<T> timSort(ArrayList<T> list, Comparator<T> cmp) {
+        // int minRun = getMinRun(list.size());  // TODO: Применять minRun
         ArrayList<ArrayList<T>> subLists = new ArrayList<>();
         int start = 0;
 
@@ -103,6 +103,9 @@ public class Timsort {
         return n + flag;
     }
 
+    /**
+     * Слияние двух отсортированных в натуральном порядке массивов.
+     */
     public static <T> ArrayList<T> merge(ArrayList<T> left, ArrayList<T> right, Comparator<T> cmp) {
         ArrayList<T> merged = new ArrayList<>(left.size() + right.size());
         int l = 0;
@@ -122,7 +125,7 @@ public class Timsort {
                     leftSeries++;
                 }
 
-                if (leftSeries == GALLOPING_STEP) {
+                if (leftSeries == GALLOP_LENGTH) {
                     int end = findSeriesEnd(left, l - 1, right.get(r), cmp);
                     for (; l <= end; l++) {
                         merged.add(left.get(l));
@@ -139,7 +142,7 @@ public class Timsort {
                     rightSeries++;
                 }
 
-                if (rightSeries == GALLOPING_STEP) {
+                if (rightSeries == GALLOP_LENGTH) {
                     int end = findSeriesEnd(right, r - 1, right.get(l), cmp);
                     for (; r <= end; r++) {
                         merged.add(left.get(r));
