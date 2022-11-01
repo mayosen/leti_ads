@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.EmptyStackException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -448,5 +449,82 @@ public class ArrayListTest {
         source.reverse();
         ArrayList<Integer> expected = new ArrayList<>(new Integer[]{5, 4, 3, 2, 1});
         assertEquals(expected, source);
+    }
+
+    @Test
+    public void createStackEmpty() {
+        Stack<Integer> stack = new ArrayList<>();
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+        assertThrows(EmptyStackException.class, stack::peek);
+        assertThrows(EmptyStackException.class, stack::pop);
+    }
+
+    @Test
+    public void createStack() {
+        Stack<Integer> stack = new ArrayList<>();
+        Integer value = 14;
+
+        assertSame(value, stack.push(value));
+        assertFalse(stack.isEmpty());
+        assertEquals(1, stack.size());
+        assertSame(value, stack.peek());
+        assertEquals(1, stack.size());
+
+        assertSame(value, stack.pop());
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+        assertThrows(EmptyStackException.class, stack::peek);
+        assertThrows(EmptyStackException.class, stack::pop);
+    }
+
+    @Test
+    public void createStackFromArray() {
+        Integer first = 100;
+        Integer second = 200;
+        Integer third = 300;
+        Stack<Integer> stack = new ArrayList<>(new Integer[]{third, second, first});
+        assertEquals(3, stack.size());
+
+        assertSame(first, stack.pop());
+        assertEquals(2, stack.size());
+        assertSame(second, stack.pop());
+        assertEquals(1, stack.size());
+        assertSame(third, stack.pop());
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+    }
+
+    @Test
+    public void stackSeveralPushes() {
+        Integer first = 100;
+        Integer second = 200;
+        Integer third = 300;
+        Stack<Integer> stack = new ArrayList<>();
+
+        assertSame(first, stack.push(first));
+        assertSame(second, stack.push(second));
+        assertSame(third, stack.push(third));
+
+        assertSame(third, stack.peek());
+        assertSame(third, stack.pop());
+        assertSame(second, stack.pop());
+        assertSame(first, stack.pop());
+        assertTrue(stack.isEmpty());
+    }
+
+    @Test
+    public void stackManyPushesWithArrayExtending() {
+        Stack<Integer> stack = new ArrayList<>();
+
+        for (int i = 1; i <= 100; i++) {
+            stack.push(Integer.valueOf(i));
+        }
+
+        for (int i = 100; i >= 1; i--) {
+            assertEquals(i, stack.pop());
+        }
+
+        assertTrue(stack.isEmpty());
     }
 }

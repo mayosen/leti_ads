@@ -1,15 +1,17 @@
 package lab_1;
 
 import java.util.Comparator;
+import java.util.EmptyStackException;
 
-public class ArrayList<E> implements List<E> {
+public class ArrayList<E> implements List<E>, Stack<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] array;
-    private int size = 0;
+    private int size;
     private Comparator<E> comparator;
 
     public ArrayList() {
         array = new Object[DEFAULT_CAPACITY];
+        size = 0;
     }
 
     public ArrayList(int capacity) {
@@ -18,15 +20,22 @@ public class ArrayList<E> implements List<E> {
         }
         int finalCapacity = Math.max(DEFAULT_CAPACITY, capacity);
         array = new Object[finalCapacity];
+        size = 0;
     }
 
     public ArrayList(E[] elements) {
-        array = new Object[DEFAULT_CAPACITY];
+        this();
         ensureCapacity(elements.length);
 
         for (E e : elements) {
             add(e);
         }
+    }
+
+    public ArrayList(ArrayList<E> other) {
+        array = Arrays.copyOf(other.array, other.array.length);
+        size = other.size;
+        comparator = other.comparator;
     }
 
     private void ensureCapacity(int requiredElementsCount) {
@@ -226,5 +235,29 @@ public class ArrayList<E> implements List<E> {
         return "ArrayList{" +
                 "size=" + size +
                 '}';
+    }
+
+    @Override
+    public E push(E item) {
+        add(item);
+        return item;
+    }
+
+    @Override
+    public E pop() {
+        if (size == 0) {
+            throw new EmptyStackException();
+        }
+        E item = get(size - 1);
+        remove(size - 1);
+        return item;
+    }
+
+    @Override
+    public E peek() {
+        if (size == 0) {
+            throw new EmptyStackException();
+        }
+        return get(size - 1);
     }
 }
