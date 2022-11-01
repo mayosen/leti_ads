@@ -3,8 +3,7 @@ package lab_2;
 import lab_1.ArrayList;
 import org.junit.jupiter.api.Test;
 
-import static lab_2.Timsort.getMinRun;
-import static lab_2.Timsort.timsort;
+import static lab_2.Timsort.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimsortTest {
@@ -37,5 +36,37 @@ class TimsortTest {
                 1, 2, 3, 25, 23, 35, 4, 5, 7, 9, 13, 6, 8, 7, 6, 5, 4, 3, 2, 1
         });
         timsort(list, Integer::compare);
+    }
+
+    @Test
+    void mergeEmpty() {
+        ArrayList<Integer> left = new ArrayList<>();
+        ArrayList<Integer> right = new ArrayList<>();
+        ArrayList<Integer> expected = new ArrayList<>();
+        assertEquals(expected, merge(left, right, Integer::compare));
+    }
+
+    @Test
+    void mergeLeftEmptySingle() {
+        ArrayList<Integer> left = new ArrayList<>();
+        ArrayList<Integer> right = new ArrayList<>(new Integer[]{1});
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1});
+        assertEquals(expected, merge(left, right, Integer::compare));
+    }
+
+    @Test
+    void mergeLeftEmpty() {
+        ArrayList<Integer> left = new ArrayList<>();
+        ArrayList<Integer> right = new ArrayList<>(new Integer[]{1, 2, 3});
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3});
+        assertEquals(expected, merge(left, right, Integer::compare));
+    }
+
+    @Test
+    void mergeFull() {
+        ArrayList<Integer> left = new ArrayList<>(new Integer[]{80, 91, 1000});
+        ArrayList<Integer> right = new ArrayList<>(new Integer[]{1, 2, 3, 100, 999});
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 80, 91, 100, 999, 1000});
+        assertEquals(expected, merge(left, right, Integer::compare));
     }
 }
