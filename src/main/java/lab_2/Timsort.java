@@ -8,6 +8,8 @@ import java.util.Comparator;
 import static lab_2.InsertionSort.insertionSort;
 
 public class Timsort {
+    private static final int GALLOPING_STEP = 7;
+
     public static <T> ArrayList<T> timsort(ArrayList<T> list, Comparator<T> cmp) {
         int minRun = getMinRun(list.size());  // TODO: Применять minRun
         ArrayList<ArrayList<T>> subLists = new ArrayList<>();
@@ -105,14 +107,44 @@ public class Timsort {
         ArrayList<T> merged = new ArrayList<>(left.size() + right.size());
         int l = 0;
         int r = 0;
+        int leftSeries = 0;
+        int rightSeries = 0;
 
         while (l < left.size() && r < right.size()) {
             if (cmp.compare(left.get(l), right.get(r)) <= 0) {
                 merged.add(left.get(l));
                 l++;
+
+                if (rightSeries > 0) {
+                    rightSeries = 0;
+                    leftSeries = 1;
+                } else {
+                    leftSeries++;
+                }
+
+                if (leftSeries == GALLOPING_STEP) {
+                    int end = findSeriesEnd(left, l - 1, right.get(r), cmp);
+                    for (; l <= end; l++) {
+                        merged.add(left.get(l));
+                    }
+                }
             } else {
                 merged.add(right.get(r));
                 r++;
+
+                if (leftSeries > 0) {
+                    leftSeries = 0;
+                    rightSeries = 1;
+                } else {
+                    rightSeries++;
+                }
+
+                if (rightSeries == GALLOPING_STEP) {
+                    int end = findSeriesEnd(right, r - 1, right.get(l), cmp);
+                    for (; r <= end; r++) {
+                        merged.add(left.get(r));
+                    }
+                }
             }
         }
 
@@ -127,5 +159,34 @@ public class Timsort {
         }
 
         return merged;
+    }
+
+    /**
+     * Бинарный поиск индекса последнего элемента в списке list (правый бинарный поиск),
+     * который не превосходит значение limitValue.
+     *
+     * @param list исходный список
+     * @param start индекс, с которого начинается поиск совпадения
+     * @param limitValue предельное значение
+     * @param cmp компаратор
+     * @return индекс последнего подходящего элемента
+     */
+    public static <T> int findSeriesEnd(ArrayList<T> list, int start, T limitValue, Comparator<T> cmp) {
+        int left = start;
+        int right = list.size() - 1;
+
+        while (left < right) {
+            int mid = (left + right + 1) / 2;
+            if (cmp.compare(list.get(mid), limitValue) <= 0) {
+                left = mid;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        if (cmp.compare(list.get(right), limitValue) > 0) {
+            return -1;
+        }
+        return right;
     }
 }
