@@ -35,11 +35,15 @@ class TimSortTest {
     }
 
     @Test
-    void runs() {
+    void t() {
         ArrayList<Integer> list = new ArrayList<>(new Integer[]{
                 1, 2, 3, 25, 23, 35, 4, 5, 7, 9, 13, 6, 8, 7, 6, 5, 4, 3, 2, 1
         });
-        timSort(list, cmp);
+        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{
+                1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9, 13, 23, 25, 35
+        });
+        ArrayList<Integer> sorted = timSort(list, cmp);
+        assertEquals(expected, sorted);
     }
 
     @Test
