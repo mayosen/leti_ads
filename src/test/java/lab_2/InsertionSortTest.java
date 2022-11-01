@@ -10,7 +10,7 @@ import static lab_2.InsertionSort.insertionSort;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InsertionSortTest {
-    private static final Comparator<Integer> cmp = Integer::compare;;
+    private static final Comparator<Integer> cmp = Integer::compare;
 
     @Test
     void empty() {

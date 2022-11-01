@@ -1,6 +1,7 @@
 package lab_2;
 
 import lab_1.ArrayList;
+import lab_1.List;
 import lab_1.Stack;
 
 import java.util.Comparator;
@@ -10,9 +11,9 @@ import static lab_2.InsertionSort.insertionSort;
 public class TimSort {
     private static final int GALLOP_LENGTH = 7;
 
-    public static <T> ArrayList<T> timSort(ArrayList<T> list, Comparator<T> cmp) {
+    public static <T> void timSort(List<T> list, Comparator<T> cmp) {
         // int minRun = getMinRun(list.size());  // TODO: Применять minRun
-        ArrayList<ArrayList<T>> subLists = new ArrayList<>();
+        List<SubList> subLists = new ArrayList<>();
         int start = 0;
 
         while (start < list.size() - 1) {
@@ -33,46 +34,50 @@ public class TimSort {
             int decreasingRun = current + 1;
 
             int maxRun = Math.max(increasingRun, decreasingRun);
-            ArrayList<T> subList = list.subList(start, maxRun);
+            SubList subList = new SubList(start, maxRun);
             subLists.add(subList);
 
             if (decreasingRun > increasingRun) {
-                subList.reverse();
+                reverse(list, start, maxRun);
             }
 
             start = maxRun;
         }
 
         for (int i = 0; i < subLists.size(); i++) {
-            insertionSort(subLists.get(i), cmp);
+            SubList subList = subLists.get(i);
+            insertionSort(list, subList.start, subList.end, cmp);
         }
 
-        Stack<ArrayList<T>> stack = new ArrayList<>();
+        Stack<SubList> stack = new ArrayList<>();
 
         for (int i = 0; i < subLists.size(); i++) {
-            ArrayList<T> subList = subLists.get(i);
+            SubList subList = subLists.get(i);
             stack.push(subList);
 
             if (stack.size() >= 2) {
-                ArrayList<T> listX = stack.pop();
-                ArrayList<T> listY = stack.pop();
+                SubList listX = stack.pop();
+                SubList listY = stack.pop();
 
                 if (stack.isEmpty()) {
-                    if (listY.size() <= listX.size()) {
-                        stack.push(merge(listX, listY, cmp));
+                    if (listY.length <= listX.length) {
+                        merge(list, listY, listX, cmp);
+                        stack.push(new SubList(listY.start, listX.end));
                     } else {
                         stack.push(listY);
                         stack.push(listX);
                     }
                 } else {
-                    ArrayList<T> listZ = stack.pop();
+                    SubList listZ = stack.pop();
 
-                    if (listZ.size() <= listX.size() + listY.size()) {
-                        if (listX.size() <= listZ.size()) {
+                    if (listZ.length <= listX.length + listY.length) {
+                        if (listX.length <= listZ.length) {
                             stack.push(listZ);
-                            stack.push(merge(listY, listX, cmp));
+                            merge(list, listY, listX, cmp);
+                            stack.push(new SubList(listY.start, listX.end));
                         } else {
-                            stack.push(merge(listY, listZ, cmp));
+                            merge(list, listZ, listY, cmp);
+                            stack.push(new SubList(listZ.start, listY.end));
                             stack.push(listX);
                         }
                     } else {
@@ -85,13 +90,11 @@ public class TimSort {
         }
 
         while (stack.size() > 1) {
-            ArrayList<T> listX = stack.pop();
-            ArrayList<T> listY = stack.pop();
-            stack.push(merge(listX, listY, cmp));
+            SubList listX = stack.pop();
+            SubList listY = stack.pop();
+            merge(list, listY, listX, cmp);
+            stack.push(new SubList(listY.start, listX.end));
         }
-
-        System.out.println(4);
-        return stack.pop();
     }
 
     public static int getMinRun(int n) {
@@ -103,19 +106,61 @@ public class TimSort {
         return n + flag;
     }
 
+    static class SubList {
+        private final int start;
+        private final int end;
+        private final int length;
+
+        /**
+         * @param start начало (включительно)
+         * @param end конец (не включительно)
+         */
+        SubList(int start, int end) {
+            this.start = start;
+            this.end = end;
+            this.length = end - start;
+        }
+
+        @Override
+        public String toString() {
+            return "SubList{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    ", length=" + length +
+                    '}';
+        }
+    }
+
+    public static <T> void reverse(List<T> list, int from, int to) {
+        to--;
+        while (from < to) {
+            T temp = list.get(from);
+            list.set(from, list.get(to));
+            list.set(to, temp);
+            from++;
+            to--;
+        }
+    }
+
     /**
-     * Слияние двух отсортированных в натуральном порядке массивов.
+     * Слияние двух соседних подмассивов.
      */
-    public static <T> ArrayList<T> merge(ArrayList<T> left, ArrayList<T> right, Comparator<T> cmp) {
-        ArrayList<T> merged = new ArrayList<>(left.size() + right.size());
-        int l = 0;
-        int r = 0;
+    public static <T> void merge(List<T> list, SubList left, SubList right, Comparator<T> cmp) {
+        List<T> leftCopy = new ArrayList<>(left.length);
+        for (int i = left.start; i < left.end; i++) {
+            leftCopy.add(list.get(i));
+        }
+
+        int l = left.start;
+        int r = right.start;
+        int current = left.start;
         int leftSeries = 0;
         int rightSeries = 0;
 
-        while (l < left.size() && r < right.size()) {
-            if (cmp.compare(left.get(l), right.get(r)) <= 0) {
-                merged.add(left.get(l));
+        while (l < left.end && r < right.end) {
+            if (cmp.compare(leftCopy.get(l - left.start), list.get(r)) <= 0) {
+                list.set(current, leftCopy.get(l - left.start));
+                current++;
                 l++;
 
                 if (rightSeries > 0) {
@@ -126,13 +171,14 @@ public class TimSort {
                 }
 
                 if (leftSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(left, l - 1, right.get(r), cmp);
-                    for (; l <= end; l++) {
-                        merged.add(left.get(l));
+                    int end = findSeriesEnd(list, l - 1, left.end, list.get(r), cmp);
+                    for (; l <= end; l++, current++) {
+                        list.set(current, leftCopy.get(l - left.start));
                     }
                 }
             } else {
-                merged.add(right.get(r));
+                list.set(current, list.get(r));
+                current++;
                 r++;
 
                 if (leftSeries > 0) {
@@ -143,25 +189,21 @@ public class TimSort {
                 }
 
                 if (rightSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(right, r - 1, left.get(l), cmp);
-                    for (; r <= end; r++) {
-                        merged.add(right.get(r));
+                    int end = findSeriesEnd(list, r - 1, right.end, leftCopy.get(l - left.start), cmp);
+                    for (; r <= end; r++, current++) {
+                        list.set(current, list.get(r));
                     }
                 }
             }
         }
 
-        while (l < left.size()) {
-            merged.add(left.get(l));
-            l++;
+        for (; l < left.end; l++, current++) {
+            list.set(current, leftCopy.get(l - left.start));
         }
 
-        while (r < right.size()) {
-            merged.add(right.get(r));
-            r++;
+        for (; r < right.end; r++, current++) {
+            list.set(current, list.get(r));
         }
-
-        return merged;
     }
 
     /**
@@ -169,14 +211,15 @@ public class TimSort {
      * который не превосходит значение limitValue.
      *
      * @param list исходный список
-     * @param start индекс, с которого начинается поиск совпадения
+     * @param from индекс, с которого ведется поиск (включительно)
+     * @param to индекс, до которого ведется поиск (не включительно)
      * @param limitValue предельное значение
      * @param cmp компаратор
      * @return индекс последнего подходящего элемента
      */
-    public static <T> int findSeriesEnd(ArrayList<T> list, int start, T limitValue, Comparator<T> cmp) {
-        int left = start;
-        int right = list.size() - 1;
+    public static <T> int findSeriesEnd(List<T> list, int from, int to, T limitValue, Comparator<T> cmp) {
+        int left = from;
+        int right = to - 1;
 
         while (left < right) {
             int mid = (left + right + 1) / 2;
