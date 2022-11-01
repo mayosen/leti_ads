@@ -75,6 +75,30 @@ class TimSortTest {
     }
 
     @Test
+    void findSeriesEndFirst() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        assertEquals(0, findSeriesEnd(list, 0, Integer.valueOf(1), cmp));
+    }
+
+    @Test
+    void findSeriesEndLast() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        assertEquals(9, findSeriesEnd(list, 0, Integer.valueOf(10), cmp));
+    }
+
+    @Test
+    void findSeriesEndMiddle() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        assertEquals(4, findSeriesEnd(list, 0, Integer.valueOf(5), cmp));
+    }
+
+    @Test
+    void findSeriesEndRandom() {
+        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        assertEquals(6, findSeriesEnd(list, 4, Integer.valueOf(7), cmp));
+    }
+
+    @Test
     void mergeWithGallop() {
         ArrayList<Integer> left = new ArrayList<>(new Integer[]{
                 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 200
@@ -120,29 +144,5 @@ class TimSortTest {
                 1, 2, 3, 4, 10, 11, 12, 13, 14, 15, 16, 17, 100
         });
         assertEquals(expected, merge(left, right, cmp));
-    }
-
-    @Test
-    void findSeriesEndFirst() {
-        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-        assertEquals(0, findSeriesEnd(list, 0, Integer.valueOf(1), cmp));
-    }
-
-    @Test
-    void findSeriesEndLast() {
-        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-        assertEquals(9, findSeriesEnd(list, 0, Integer.valueOf(10), cmp));
-    }
-
-    @Test
-    void findSeriesEndMiddle() {
-        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-        assertEquals(4, findSeriesEnd(list, 0, Integer.valueOf(5), cmp));
-    }
-
-    @Test
-    void findSeriesEndRandom() {
-        ArrayList<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-        assertEquals(6, findSeriesEnd(list, 4, Integer.valueOf(7), cmp));
     }
 }

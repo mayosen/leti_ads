@@ -143,9 +143,9 @@ public class TimSort {
                 }
 
                 if (rightSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(right, r - 1, right.get(l), cmp);
+                    int end = findSeriesEnd(right, r - 1, left.get(l), cmp);
                     for (; r <= end; r++) {
-                        merged.add(left.get(r));
+                        merged.add(right.get(r));
                     }
                 }
             }
