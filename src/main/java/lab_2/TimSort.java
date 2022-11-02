@@ -70,62 +70,48 @@ public class TimSort {
             start = maxRun;
         }
 
-        for (int i = 0; i < subLists.size(); i++) {
-            SubList subList = subLists.get(i);
-            // log("sorting with insertionSort: %s", elementsString(list, subList));
-            insertionSort(list, subList.start, subList.end, cmp);
-            // log("sorted: %s", elementsString(list, subList));
-        }
-
         Stack<SubList> stack = new ArrayList<>();
 
         for (int i = 0; i < subLists.size(); i++) {
             SubList subList = subLists.get(i);
+            // log("sorting with insertionSort: %s", elementsString(list, subList));
+            // insertionSort(list, subList.start, subList.end, cmp);
+            // log("sorted: %s", elementsString(list, subList));
             stack.push(subList);
+        }
 
-            if (stack.size() >= 2) {
-                SubList listX = stack.pop();
-                SubList listY = stack.pop();
+        while (stack.size() >= 3) {
+            SubList listX = stack.pop();
+            SubList listY = stack.pop();
+            SubList listZ = stack.pop();
 
-                if (stack.isEmpty()) {
-                    if (listY.length <= listX.length) {
-                        log("merging %s and %s", listY, listX);
-                        merge(list, listY, listX, cmp);
-                        stack.push(new SubList(listY.start, listX.end));
-                    } else {
-                        stack.push(listY);
-                        stack.push(listX);
-                    }
+            if (listZ.length <= listX.length + listY.length || listY.length <= listX.length) {
+                if (listX.length <= listZ.length) {
+                    stack.push(listZ);
+                    log("merging %s and %s", listY, listX);
+                    merge(list, listY, listX, cmp);
+                    stack.push(new SubList(listY.start, listX.end));
                 } else {
-                    SubList listZ = stack.pop();
-
-                    if (listZ.length <= listX.length + listY.length) {
-                        if (listX.length <= listZ.length) {
-                            stack.push(listZ);
-                            log("merging %s and %s", listY, listX);
-                            merge(list, listY, listX, cmp);
-                            stack.push(new SubList(listY.start, listX.end));
-                        } else {
-                            log("merging %s and %s", listZ, listY);
-                            merge(list, listZ, listY, cmp);
-                            stack.push(new SubList(listZ.start, listY.end));
-                            stack.push(listX);
-                        }
-                    } else {
-                        stack.push(listZ);
-                        stack.push(listY);
-                        stack.push(listX);
-                    }
+                    log("merging %s and %s", listZ, listY);
+                    merge(list, listZ, listY, cmp);
+                    stack.push(new SubList(listZ.start, listY.end));
+                    stack.push(listX);
                 }
+            } else {
+                // Если все норм, то надо двигаться дальше по стеку
+                stack.push(listZ);
+                stack.push(listY);
             }
         }
 
-        while (stack.size() > 1) {
+        // TODO: Проверить на маленьких данных, чтобы не падало
+        // Особенно после добавление minRun и массиве до 64 элементов чтобы работало
+        // Имеем 2 элемента в стеке
+        if (stack.size() == 2) {
             SubList listX = stack.pop();
             SubList listY = stack.pop();
             log("merging %s and %s", listY, listX);
             merge(list, listY, listX, cmp);
-            stack.push(new SubList(listY.start, listX.end));
         }
     }
 

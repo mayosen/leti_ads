@@ -22,7 +22,6 @@ class TimSortTest {
             if (current >= last) {
                 last = current;
             } else {
-                System.out.println(elementsString(sorted));
                 throw new AssertionError(String.format("element[%d] %d > element[%d] %d", i - 1, last, i, current));
             }
         }
@@ -241,6 +240,7 @@ class TimSortTest {
         Integer[] objects = new Random().ints(100, -100, 100).boxed().toArray(Integer[]::new);
         List<Integer> source = new ArrayList<>(objects);
         timSort(source, cmp);
+        System.out.println(elementsString(source));
         assertSorted(source);
     }
 }
