@@ -11,7 +11,33 @@ import static lab_2.InsertionSort.insertionSort;
 public class TimSort {
     private static final int GALLOP_LENGTH = 7;
 
+    private static void log(String format, Object... args) {
+        System.out.format(format + "\n", args);
+    }
+
+    public static <T> String elementsString(List<T> list, int from, int to) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int i = from; i < to; i++) {
+            builder.append(list.get(i));
+            if (i != to - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
+    public static <T> String elementsString(List<T> list, SubList subList) {
+        return elementsString(list, subList.start, subList.end);
+    }
+
+    public static <T> String elementsString(List<T> list) {
+        return elementsString(list, 0, list.size());
+    }
+
     public static <T> void timSort(List<T> list, Comparator<T> cmp) {
+        log("sorting %s", elementsString(list));
         // int minRun = getMinRun(list.size());  // TODO: Применять minRun
         List<SubList> subLists = new ArrayList<>();
         int start = 0;
@@ -24,7 +50,6 @@ public class TimSort {
             }
 
             int increasingRun = current + 1;
-
             current = start;
 
             while (current + 1 < list.size() && cmp.compare(list.get(current), list.get(current + 1)) > 0) {
@@ -32,13 +57,14 @@ public class TimSort {
             }
 
             int decreasingRun = current + 1;
-
             int maxRun = Math.max(increasingRun, decreasingRun);
             SubList subList = new SubList(start, maxRun);
             subLists.add(subList);
+            log("new %s: %s", subList, elementsString(list, subList));
 
             if (decreasingRun > increasingRun) {
                 reverse(list, start, maxRun);
+                log("subList reversed: %s", elementsString(list, subList));
             }
 
             start = maxRun;
@@ -46,7 +72,9 @@ public class TimSort {
 
         for (int i = 0; i < subLists.size(); i++) {
             SubList subList = subLists.get(i);
+            // log("sorting with insertionSort: %s", elementsString(list, subList));
             insertionSort(list, subList.start, subList.end, cmp);
+            // log("sorted: %s", elementsString(list, subList));
         }
 
         Stack<SubList> stack = new ArrayList<>();
@@ -61,6 +89,7 @@ public class TimSort {
 
                 if (stack.isEmpty()) {
                     if (listY.length <= listX.length) {
+                        log("merging %s and %s", listY, listX);
                         merge(list, listY, listX, cmp);
                         stack.push(new SubList(listY.start, listX.end));
                     } else {
@@ -73,9 +102,11 @@ public class TimSort {
                     if (listZ.length <= listX.length + listY.length) {
                         if (listX.length <= listZ.length) {
                             stack.push(listZ);
+                            log("merging %s and %s", listY, listX);
                             merge(list, listY, listX, cmp);
                             stack.push(new SubList(listY.start, listX.end));
                         } else {
+                            log("merging %s and %s", listZ, listY);
                             merge(list, listZ, listY, cmp);
                             stack.push(new SubList(listZ.start, listY.end));
                             stack.push(listX);
@@ -92,6 +123,7 @@ public class TimSort {
         while (stack.size() > 1) {
             SubList listX = stack.pop();
             SubList listY = stack.pop();
+            log("merging %s and %s", listY, listX);
             merge(list, listY, listX, cmp);
             stack.push(new SubList(listY.start, listX.end));
         }
