@@ -42,7 +42,7 @@ public class TimSort {
         List<SubList> subLists = new ArrayList<>();
         int start = 0;
 
-        while (start < list.size() - 1) {
+        while (start < list.size()) {
             int current = start;
 
             while (current + 1 < list.size() && cmp.compare(list.get(current), list.get(current + 1)) <= 0) {

@@ -237,8 +237,17 @@ class TimSortTest {
 
     @Test
     void sortLongRandom() {
-        Integer[] objects = new Random().ints(100, -100, 100).boxed().toArray(Integer[]::new);
-        List<Integer> source = new ArrayList<>(objects);
+        Integer[] numbers = new Random().ints(100, -100, 100).boxed().toArray(Integer[]::new);
+        List<Integer> source = new ArrayList<>(numbers);
+        timSort(source, cmp);
+        System.out.println(elementsString(source));
+        assertSorted(source);
+    }
+
+    @Test
+    void sortLongSample() {
+        Integer[] numbers = new Integer[]{96, 58, -16, 45, -63, -68, 65, 52, 75, -83, -56, 10, -40, -59, 73, -53, 94, 19, 70, 5, 6, 18, 77, 80, 63, 45, 67, -42, 65, -73, -18, 69, -75, 1, 97, -42, -31, 33, -88, -87, -70, -5, -93, 31, 50, 31, -48, 59, 9, -65, -39, 78, 47, 50, -92, 55, -17, 50, -15, 11, -73, -33, -10, 14, 5, -74, 70, 30, -36, 1, 73, 15, 76, 36, 29, 97, -1, 25, 98, 43, 87, 41, 42, -70, 13, -32, 47, 42, -68, 35, 79, 23, 20, -63, -77, -48, 43, 3, 53, 25};
+        List<Integer> source = new ArrayList<>(numbers);
         timSort(source, cmp);
         System.out.println(elementsString(source));
         assertSorted(source);
