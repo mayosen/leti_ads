@@ -28,29 +28,6 @@ class TimSortTest {
         }
     }
 
-    private void printMinRun(int value) {
-        System.out.format("minRun for %d = %d\n", value, getMinRun(value));
-    }
-
-    @Test
-    void minRun() {
-        printMinRun(1);
-        printMinRun(2);
-        printMinRun(3);
-        printMinRun(4);
-        printMinRun(32);
-        printMinRun(45);
-        printMinRun(64);
-        printMinRun(100);
-        printMinRun(269);
-        printMinRun(356);
-        printMinRun(1_000);
-        printMinRun(1_000_000);
-        printMinRun(10_000_000);
-        printMinRun(100_000_000);
-        printMinRun(1_000_000_000);
-    }
-
     @Test
     void mergeEmpty() {
         List<Integer> list = new ArrayList<>();
@@ -226,17 +203,6 @@ class TimSortTest {
     }
 
     @Test
-    void sortIdealCase() {
-        List<Integer> list = new ArrayList<>(new Integer[]{
-                9, 10, 11, 12, 13, 14, 15, 16, 5, 6, 7, 8, 3, 4, 1, 2
-        });
-        timSort(list, cmp);
-        List<Integer> expected = new ArrayList<>();
-        IntStream.iterate(1, x -> x <= 16, x -> x + 1).forEach(expected::add);
-        assertEquals(expected, list);
-    }
-
-    @Test
     void sortSmall() {
         Integer[] numbers = new Random().ints(60, -100, 100).boxed().toArray(Integer[]::new);
         List<Integer> source = new ArrayList<>(numbers);
@@ -287,7 +253,7 @@ class TimSortTest {
         assertEquals(expected, source);
     }
 
-    @Test
+    // @Test
     void sort100000() {
         List<Integer> source = new ArrayList<>(readSample("src/main/resources/100000.txt"));
         timSort(source, cmp);
@@ -295,7 +261,7 @@ class TimSortTest {
         assertEquals(expected, source);
     }
 
-    @Test
+    // @Test
     void sort1000000() {
         List<Integer> source = new ArrayList<>(readSample("src/main/resources/1000000.txt"));
         timSort(source, cmp);

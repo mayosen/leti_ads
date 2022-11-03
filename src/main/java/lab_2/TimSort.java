@@ -37,8 +37,9 @@ public class TimSort {
     }
 
     public static <T> void timSort(List<T> list, Comparator<T> cmp) {
-        log("sorting %s", elementsString(list));
-        // int minRun = getMinRun(list.size());  // TODO: Применять minRun
+        log("sorting: %s", elementsString(list));
+        int minRun = getMinRun(list.size());
+        log("minRun: %d", minRun);
         List<SubList> subLists = new ArrayList<>();
         int start = 0;
 
@@ -58,15 +59,20 @@ public class TimSort {
 
             int decreasingRun = current + 1;
             int maxRun = Math.max(increasingRun, decreasingRun);
-            SubList subList = new SubList(start, maxRun);
-            subLists.add(subList);
-            log("new %s: %s", subList, elementsString(list, subList));
 
             if (decreasingRun > increasingRun) {
                 reverse(list, start, maxRun);
-                log("reversed: %s", elementsString(list, subList));
+                // log("reversed: %s", elementsString(list, start, maxRun));
             }
 
+            if (maxRun - start < minRun) {
+                maxRun = Math.min(maxRun + (minRun - (maxRun - start)), list.size());
+                log("extending run to minRun: %s", elementsString(list, start, maxRun));
+            }
+
+            SubList subList = new SubList(start, maxRun);
+            subLists.add(subList);
+            log("new %s: %s", subList, elementsString(list, subList));
             start = maxRun;
         }
 
@@ -74,8 +80,8 @@ public class TimSort {
 
         for (int i = 0; i < subLists.size(); i++) {
             SubList subList = subLists.get(i);
-            // log("sorting with insertionSort: %s", elementsString(list, subList));
-            // insertionSort(list, subList.start, subList.end, cmp);
+            // log("insertionSort: %s", subList, elementsString(list, subList));
+            insertionSort(list, subList.start, subList.end, cmp);
             // log("sorted: %s", elementsString(list, subList));
             stack.push(subList);
         }
@@ -85,7 +91,7 @@ public class TimSort {
             SubList listY = stack.pop();
             SubList listZ = stack.pop();
 
-            if (!(listZ.length > listY.length + listX.length) && (listY.length > listX.length)) {
+            if (!((listZ.length > listY.length + listX.length) && (listY.length > listX.length))) {
                 if (listX.length <= listZ.length) {
                     log("merging %s and %s", listY, listX);
                     merge(list, listY, listX, cmp);
@@ -108,10 +114,10 @@ public class TimSort {
         if (stack.size() == 2) {
             SubList listX = stack.pop();
             SubList listY = stack.pop();
-            log("merging %s and %s", listY, listX);
+            log("last merging %s and %s", listY, listX);
             merge(list, listY, listX, cmp);
         } else {
-            log("stack.size != 3");
+            log("stack.size = 1");
         }
     }
 
@@ -176,8 +182,10 @@ public class TimSort {
         int rightSeries = 0;
 
         while (l < left.end && r < right.end) {
-            if (cmp.compare(leftCopy.get(l - left.start), list.get(r)) <= 0) {
-                list.set(current, leftCopy.get(l - left.start));
+            int leftIndex = l - left.start;
+            if (cmp.compare(leftCopy.get(leftIndex), list.get(r)) <= 0) {
+                list.set(current, leftCopy.get(leftIndex));
+                // log("merged left[%d] to result[%d] = %d", l, current, leftCopy.get(leftIndex));
                 current++;
                 l++;
 
@@ -189,13 +197,17 @@ public class TimSort {
                 }
 
                 if (leftSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(list, l - 1, left.end, list.get(r), cmp);
+                    int end = findSeriesEnd(leftCopy, leftIndex - 1, left.length, list.get(r), cmp);
+                    // log("left gallop from %d to %d", l - 1, end);
                     for (; l <= end; l++, current++) {
-                        list.set(current, leftCopy.get(l - left.start));
+                        leftIndex = l - left.start;
+                        list.set(current, leftCopy.get(leftIndex));
+                        // log("merged galloping left[%d] to result[%d] = %d", l, current, leftCopy.get(leftIndex));
                     }
                 }
             } else {
                 list.set(current, list.get(r));
+                // log("merged right[%d] to result[%d] = %d", r, current, list.get(r));
                 current++;
                 r++;
 
@@ -207,20 +219,24 @@ public class TimSort {
                 }
 
                 if (rightSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(list, r - 1, right.end, leftCopy.get(l - left.start), cmp);
+                    int end = findSeriesEnd(list, r - 1, right.end, leftCopy.get(leftIndex), cmp);
+                    // log("right gallop from %d to %d", r - 1, end);
                     for (; r <= end; r++, current++) {
                         list.set(current, list.get(r));
+                        // log("merged galloping right[%d] to result[%d] = %d", r, current, list.get(r));
                     }
                 }
             }
         }
 
-        for (; l < left.end; l++, current++) {
-            list.set(current, leftCopy.get(l - left.start));
+        for (int leftIndex = l - left.start; leftIndex < left.length; leftIndex++, current++) {
+            list.set(current, leftCopy.get(leftIndex));
+            // log("rests left[%d] to result[%d] = %d", l, current, leftCopy.get(leftIndex));
         }
 
         for (; r < right.end; r++, current++) {
             list.set(current, list.get(r));
+            // log("rests right[%d] to result[%d] = %d", r, current, list.get(r));
         }
     }
 
