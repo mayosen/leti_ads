@@ -64,7 +64,7 @@ public class TimSort {
 
             if (decreasingRun > increasingRun) {
                 reverse(list, start, maxRun);
-                log("subList reversed: %s", elementsString(list, subList));
+                log("reversed: %s", elementsString(list, subList));
             }
 
             start = maxRun;
@@ -85,11 +85,11 @@ public class TimSort {
             SubList listY = stack.pop();
             SubList listZ = stack.pop();
 
-            if (listZ.length <= listX.length + listY.length || listY.length <= listX.length) {
+            if (!(listZ.length > listY.length + listX.length) && (listY.length > listX.length)) {
                 if (listX.length <= listZ.length) {
-                    stack.push(listZ);
                     log("merging %s and %s", listY, listX);
                     merge(list, listY, listX, cmp);
+                    stack.push(listZ);
                     stack.push(new SubList(listY.start, listX.end));
                 } else {
                     log("merging %s and %s", listZ, listY);
@@ -98,20 +98,20 @@ public class TimSort {
                     stack.push(listX);
                 }
             } else {
-                // Если все норм, то надо двигаться дальше по стеку
+                log("merging %s and %s", listY, listX);
+                merge(list, listY, listX, cmp);
                 stack.push(listZ);
-                stack.push(listY);
+                stack.push(new SubList(listY.start, listX.end));
             }
         }
 
-        // TODO: Проверить на маленьких данных, чтобы не падало
-        // Особенно после добавление minRun и массиве до 64 элементов чтобы работало
-        // Имеем 2 элемента в стеке
         if (stack.size() == 2) {
             SubList listX = stack.pop();
             SubList listY = stack.pop();
             log("merging %s and %s", listY, listX);
             merge(list, listY, listX, cmp);
+        } else {
+            log("stack.size != 3");
         }
     }
 

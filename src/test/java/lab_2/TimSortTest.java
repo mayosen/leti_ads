@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 import static lab_2.TimSort.*;
+import static lab_2.Utils.readSample;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TimSortTest {
@@ -236,6 +237,15 @@ class TimSortTest {
     }
 
     @Test
+    void sortSmall() {
+        Integer[] numbers = new Random().ints(60, -100, 100).boxed().toArray(Integer[]::new);
+        List<Integer> source = new ArrayList<>(numbers);
+        timSort(source, cmp);
+        System.out.println(elementsString(source));
+        assertSorted(source);
+    }
+
+    @Test
     void sortLongRandom() {
         Integer[] numbers = new Random().ints(100, -100, 100).boxed().toArray(Integer[]::new);
         List<Integer> source = new ArrayList<>(numbers);
@@ -251,5 +261,45 @@ class TimSortTest {
         timSort(source, cmp);
         System.out.println(elementsString(source));
         assertSorted(source);
+    }
+
+    @Test
+    void sort100() {
+        List<Integer> source = new ArrayList<>(readSample("src/main/resources/100.txt"));
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/100_sorted.txt"));
+        assertEquals(expected, source);
+    }
+
+    @Test
+    void sort1000() {
+        List<Integer> source = new ArrayList<>(readSample("src/main/resources/1000.txt"));
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/1000_sorted.txt"));
+        assertEquals(expected, source);
+    }
+
+    @Test
+    void sort10000() {
+        List<Integer> source = new ArrayList<>(readSample("src/main/resources/10000.txt"));
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/10000_sorted.txt"));
+        assertEquals(expected, source);
+    }
+
+    @Test
+    void sort100000() {
+        List<Integer> source = new ArrayList<>(readSample("src/main/resources/100000.txt"));
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/100000_sorted.txt"));
+        assertEquals(expected, source);
+    }
+
+    @Test
+    void sort1000000() {
+        List<Integer> source = new ArrayList<>(readSample("src/main/resources/1000000.txt"));
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/1000000_sorted.txt"));
+        assertEquals(expected, source);
     }
 }
