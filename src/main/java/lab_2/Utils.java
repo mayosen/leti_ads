@@ -7,9 +7,13 @@ import java.util.Random;
 public class Utils {
     public static void main(String[] args) {
         generateSampleFor(100);
+        generateSampleFor(500);
         generateSampleFor(1_000);
+        generateSampleFor(5_000);
         generateSampleFor(10_000);
+        generateSampleFor(50_000);
         generateSampleFor(100_000);
+        generateSampleFor(500_000);
         generateSampleFor(1_000_000);
     }
 
@@ -22,7 +26,7 @@ public class Utils {
     }
 
     public static int[] generateRandomNumbers(int count) {
-        int max = Math.multiplyExact(count, 2);
+        int max = count / (int) Math.sqrt(count);
         return new Random().ints(count, -max, max + 1).toArray();
     }
 
