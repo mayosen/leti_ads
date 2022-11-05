@@ -253,7 +253,7 @@ class TimSortTest {
         assertEquals(expected, source);
     }
 
-    // @Test
+    @Test
     void sort100000() {
         List<Integer> source = new ArrayList<>(readSample("src/main/resources/100000.txt"));
         timSort(source, cmp);
@@ -261,11 +261,19 @@ class TimSortTest {
         assertEquals(expected, source);
     }
 
-    // @Test
+    @Test
     void sort1000000() {
         List<Integer> source = new ArrayList<>(readSample("src/main/resources/1000000.txt"));
         timSort(source, cmp);
         List<Integer> expected = new ArrayList<>(readSample("src/main/resources/1000000_sorted.txt"));
+        assertEquals(expected, source);
+    }
+
+    @Test
+    void sortE() {
+        List<Integer> source = new ArrayList<>(new Integer[]{9, 10, 7, 8, 5, 6, 3, 4, 1, 2});
+        timSort(source, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
         assertEquals(expected, source);
     }
 }

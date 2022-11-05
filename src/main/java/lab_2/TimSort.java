@@ -37,11 +37,12 @@ public class TimSort {
     }
 
     public static <T> void timSort(List<T> list, Comparator<T> cmp) {
-        log("sorting: %s", elementsString(list));
+        // log("sorting: %s", elementsString(list));
         int minRun = getMinRun(list.size());
-        log("minRun: %d", minRun);
-        List<SubList> subLists = new ArrayList<>();
+        // log("minRun: %d", minRun);
+
         int start = 0;
+        Stack<SubList> stack = new ArrayList<>();
 
         while (start < list.size()) {
             int current = start;
@@ -67,58 +68,22 @@ public class TimSort {
 
             if (maxRun - start < minRun) {
                 maxRun = Math.min(maxRun + (minRun - (maxRun - start)), list.size());
-                log("extending run to minRun: %s", elementsString(list, start, maxRun));
+                // log("extending run to minRun: %s", elementsString(list, start, maxRun));
             }
 
             SubList subList = new SubList(start, maxRun);
-            subLists.add(subList);
-            log("new %s: %s", subList, elementsString(list, subList));
+            // log("new %s: %s", subList, elementsString(list, subList));
+
+            insertionSort(list, subList.start, subList.end, cmp);
+            // log("sorted: %s", elementsString(list, subList));
+
+            stack.push(subList);
+            mergeCollapse(list, stack, cmp);
+
             start = maxRun;
         }
 
-        Stack<SubList> stack = new ArrayList<>();
-
-        for (int i = 0; i < subLists.size(); i++) {
-            SubList subList = subLists.get(i);
-            // log("insertionSort: %s", subList, elementsString(list, subList));
-            insertionSort(list, subList.start, subList.end, cmp);
-            // log("sorted: %s", elementsString(list, subList));
-            stack.push(subList);
-        }
-
-        while (stack.size() >= 3) {
-            SubList listX = stack.pop();
-            SubList listY = stack.pop();
-            SubList listZ = stack.pop();
-
-            if (!((listZ.length > listY.length + listX.length) && (listY.length > listX.length))) {
-                if (listX.length <= listZ.length) {
-                    log("merging %s and %s", listY, listX);
-                    merge(list, listY, listX, cmp);
-                    stack.push(listZ);
-                    stack.push(new SubList(listY.start, listX.end));
-                } else {
-                    log("merging %s and %s", listZ, listY);
-                    merge(list, listZ, listY, cmp);
-                    stack.push(new SubList(listZ.start, listY.end));
-                    stack.push(listX);
-                }
-            } else {
-                log("merging %s and %s", listY, listX);
-                merge(list, listY, listX, cmp);
-                stack.push(listZ);
-                stack.push(new SubList(listY.start, listX.end));
-            }
-        }
-
-        if (stack.size() == 2) {
-            SubList listX = stack.pop();
-            SubList listY = stack.pop();
-            log("last merging %s and %s", listY, listX);
-            merge(list, listY, listX, cmp);
-        } else {
-            log("stack.size = 1");
-        }
+        mergeForceCollapse(list, stack, cmp);
     }
 
     public static int getMinRun(int n) {
@@ -163,6 +128,51 @@ public class TimSort {
             list.set(to, temp);
             from++;
             to--;
+        }
+    }
+
+    /**
+     * Слияние двух подмассивов, если они не выполняют инвариант.
+     */
+    public static <T> void mergeCollapse(List<T> list, Stack<SubList> stack, Comparator<T> cmp) {
+        while (stack.size() >= 3) {
+            SubList listX = stack.pop();
+            SubList listY = stack.pop();
+            SubList listZ = stack.pop();
+
+            if (!(listY.length > listX.length)) {
+                if (listX.length < listZ.length) {
+                    // log("merging %s and %s", listY, listX);
+                    merge(list, listY, listX, cmp);
+                    stack.push(listZ);
+                    stack.push(new SubList(listY.start, listX.end));
+                } else {
+                    // log("merging %s and %s", listZ, listY);
+                    merge(list, listZ, listY, cmp);
+                    stack.push(new SubList(listZ.start, listY.end));
+                    stack.push(listX);
+                }
+            } else if (!(listZ.length > listX.length + listY.length)) {
+                // log("merging %s and %s", listZ, listY);
+                merge(list, listZ, listY, cmp);
+                stack.push(new SubList(listZ.start, listY.end));
+                stack.push(listX);
+            } else {
+                stack.push(listZ);
+                stack.push(listY);
+                stack.push(listX);
+                break;
+            }
+        }
+    }
+
+    public static <T> void mergeForceCollapse(List<T> list, Stack<SubList> stack, Comparator<T> cmp) {
+        while (stack.size() >= 2) {
+            SubList listX = stack.pop();
+            SubList listY = stack.pop();
+            // log("last merging %s and %s", listY, listX);
+            merge(list, listY, listX, cmp);
+            stack.push(new SubList(listY.start, listX.end));
         }
     }
 
