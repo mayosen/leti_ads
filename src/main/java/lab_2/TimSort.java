@@ -204,10 +204,11 @@ public class TimSort {
         int rightSeries = 0;
 
         while (l < left.end && r < right.end) {
-            int leftIndex = l - left.start;
-            if (cmp.compare(leftCopy.get(leftIndex), list.get(r)) <= 0) {
-                list.set(current, leftCopy.get(leftIndex));
-                // log("merged left[%d] to result[%d] = %d", l, current, leftCopy.get(leftIndex));
+            T leftItem = leftCopy.get(l - left.start);
+            T rightItem = list.get(r);
+
+            if (cmp.compare(leftItem, rightItem) <= 0) {
+                list.set(current, leftItem);
                 current++;
                 l++;
 
@@ -219,17 +220,15 @@ public class TimSort {
                 }
 
                 if (leftSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(leftCopy, leftIndex - 1, left.length, list.get(r), cmp);
-                    // log("left gallop from %d to %d", l - 1, left.start + end);
-                    for (; l <= end; l++, current++) {
-                        leftIndex = l - left.start;
-                        list.set(current, leftCopy.get(leftIndex));
-                        // log("merged galloping left[%d] to result[%d] = %d", l, current, leftCopy.get(leftIndex));
+                    int end = findSeriesEnd(leftCopy, l - left.start - 1, left.length, rightItem, cmp);
+                    // log("left gallop from %d to %d", l, left.start + end);
+                    // log("%s", elementsString(leftCopy, l - left.start, end + 1));
+                    for (; l <= left.start + end; l++, current++) {
+                        list.set(current, leftCopy.get(l - left.start));
                     }
                 }
             } else {
-                list.set(current, list.get(r));
-                // log("merged right[%d] to result[%d] = %d", r, current, list.get(r));
+                list.set(current, rightItem);
                 current++;
                 r++;
 
@@ -241,11 +240,11 @@ public class TimSort {
                 }
 
                 if (rightSeries == GALLOP_LENGTH) {
-                    int end = findSeriesEnd(list, r - 1, right.end, leftCopy.get(leftIndex), cmp);
-                    // log("right gallop from %d to %d", r - 1, end);
+                    int end = findSeriesEnd(list, r - 1, right.end, leftItem, cmp);
+                    // log("right gallop from %d to %d", r, end);
+                    // log("%s", elementsString(list, r, end + 1));
                     for (; r <= end; r++, current++) {
                         list.set(current, list.get(r));
-                        // log("merged galloping right[%d] to result[%d] = %d", r, current, list.get(r));
                     }
                 }
             }
