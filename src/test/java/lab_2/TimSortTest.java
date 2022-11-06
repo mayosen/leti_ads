@@ -176,6 +176,46 @@ class TimSortTest {
     }
 
     @Test
+    void sortEmpty() {
+        List<Integer> list = new ArrayList<>(new Integer[]{});
+        timSort(list, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void sortSingleItem() {
+        List<Integer> list = new ArrayList<>(new Integer[]{1});
+        timSort(list, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{1});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void sortTwoItems() {
+        List<Integer> list = new ArrayList<>(new Integer[]{4, 3});
+        timSort(list, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{3, 4});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void sortSorted() {
+        List<Integer> list = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
+        timSort(list, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
+        assertEquals(expected, list);
+    }
+
+    @Test
+    void sortSortedNegatively() {
+        List<Integer> list = new ArrayList<>(new Integer[]{8, 7, 6, 5, 4, 3, 2, 1});
+        timSort(list, cmp);
+        List<Integer> expected = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5, 6, 7, 8});
+        assertEquals(expected, list);
+    }
+
+    @Test
     void sortSmall() {
         List<Integer> list = new ArrayList<>(new Integer[]{
                 1, 2, 3, 25, 23, 35, 4, 5, 7, 9, 13, 6, 8, 7, 6, 5, 4, 3, 2, 1

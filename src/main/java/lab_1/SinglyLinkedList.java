@@ -291,6 +291,19 @@ public class SinglyLinkedList<E> implements List<E>, Stack<E> {
     }
 
     @Override
+    public List<E> subList(int from, int to) {
+        SinglyLinkedList<E> created = new SinglyLinkedList<>();
+        Node source = getNode(from);
+
+        for (int i = from; i < to; i++) {
+            created.add(source.data);
+            source = source.next;
+        }
+
+        return created;
+    }
+
+    @Override
     public E push(E item) {
         add(0, item);
         return item;

@@ -207,12 +207,7 @@ public class ArrayList<E> implements List<E>, Stack<E> {
         }
     }
 
-    /**
-     * Создание копии подмассива.
-     * @param from индекс, начиная с которого копировать (включительно)
-     * @param to индекс, до которого копировать (не включительно)
-     * @return
-     */
+    @Override
     public ArrayList<E> subList(int from, int to) {
         int length = to - from;
         ArrayList<E> created = new ArrayList<>(length);

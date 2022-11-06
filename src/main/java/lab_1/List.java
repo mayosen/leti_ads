@@ -26,4 +26,12 @@ public interface List<E> {
     void clear();
 
     void sort(Comparator<E> comparator);
+
+    /**
+     * Создание копии подмассива.
+     * @param from индекс, начиная с которого копировать (включительно)
+     * @param to индекс, до которого копировать (не включительно)
+     * @return копия подмассива
+     */
+    List<E> subList(int from, int to);
 }

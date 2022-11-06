@@ -16,7 +16,7 @@ public class InsertionSort {
      * @param from индекс начала (включительно)
      * @param to индекс конца (не включительно)
      */
-    public static <T> void insertionSort(List<T> list, int from, int to, Comparator<T> cmp) {
+    static <T> void insertionSort(List<T> list, int from, int to, Comparator<T> cmp) {
         T left;
         T right;
         for (int i = from + 1; i < to; i++) {

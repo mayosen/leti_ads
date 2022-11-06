@@ -388,6 +388,53 @@ public class SinglyLinkedListTest {
     }
 
     @Test
+    public void subListEmpty() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 0);
+        List<Integer> expected = new ArrayList<>();
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListSingle() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 1);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListFull() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, source.size());
+        assertEquals(source, copy);
+    }
+
+    @Test
+    public void subListStarts() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 3);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10, 20, 30});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListEnds() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(2, source.size());
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{30, 40, 50});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListMiddle() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(2, 3);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{30});
+        assertEquals(expected, copy);
+    }
+
+    @Test
     public void createStackEmpty() {
         Stack<Integer> stack = new SinglyLinkedList<>();
         assertTrue(stack.isEmpty());
