@@ -69,7 +69,7 @@ public class Utils {
             return array;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException();
         }
-        throw new RuntimeException();
     }
 }

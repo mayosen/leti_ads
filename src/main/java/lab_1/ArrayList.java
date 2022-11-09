@@ -208,21 +208,12 @@ public class ArrayList<E> implements List<E>, Stack<E> {
     }
 
     @Override
-    public ArrayList<E> subList(int from, int to) {
+    public List<E> subList(int from, int to) {
         int length = to - from;
         ArrayList<E> created = new ArrayList<>(length);
         Arrays.arrayCopy(array, from, created.array, 0, length);
         created.size = length;
         return created;
-    }
-
-    public void reverse() {
-        for (int left = 0; left < size / 2; left++) {
-            int right = size - left - 1;
-            Object temp = array[left];
-            array[left] = array[right];
-            array[right] = temp;
-        }
     }
 
     @Override

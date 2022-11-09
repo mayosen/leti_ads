@@ -436,38 +436,6 @@ public class ArrayListTest {
     }
 
     @Test
-    public void reverseEmpty() {
-        ArrayList<Integer> source = new ArrayList<>();
-        source.reverse();
-        ArrayList<Integer> expected = new ArrayList<>();
-        assertEquals(expected, source);
-    }
-
-    @Test
-    public void reverseSingleItem() {
-        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1});
-        source.reverse();
-        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{1});
-        assertEquals(expected, source);
-    }
-
-    @Test
-    public void reverseEvenSize() {
-        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1, 2, 3, 4});
-        source.reverse();
-        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{4, 3, 2, 1});
-        assertEquals(expected, source);
-    }
-
-    @Test
-    public void reverseOddSize() {
-        ArrayList<Integer> source = new ArrayList<>(new Integer[]{1, 2, 3, 4, 5});
-        source.reverse();
-        ArrayList<Integer> expected = new ArrayList<>(new Integer[]{5, 4, 3, 2, 1});
-        assertEquals(expected, source);
-    }
-
-    @Test
     public void createStackEmpty() {
         Stack<Integer> stack = new ArrayList<>();
         assertTrue(stack.isEmpty());
