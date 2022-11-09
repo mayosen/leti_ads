@@ -4,12 +4,16 @@ import java.util.Comparator;
 import java.util.EmptyStackException;
 
 public class SinglyLinkedList<E> implements List<E>, Stack<E> {
-    private int size = 0;
+    private int size;
     private Node head;
 
-    public SinglyLinkedList() { }
+    public SinglyLinkedList() {
+        head = null;
+        size = 0;
+    }
 
     public SinglyLinkedList(E[] elements) {
+        this();
         for (E e : elements) {
             add(e);
         }
@@ -284,6 +288,19 @@ public class SinglyLinkedList<E> implements List<E>, Stack<E> {
                 return;
             }
         }
+    }
+
+    @Override
+    public List<E> subList(int from, int to) {
+        SinglyLinkedList<E> created = new SinglyLinkedList<>();
+        Node source = getNode(from);
+
+        for (int i = from; i < to; i++) {
+            created.add(source.data);
+            source = source.next;
+        }
+
+        return created;
     }
 
     @Override

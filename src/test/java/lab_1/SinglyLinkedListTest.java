@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.EmptyStackException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -384,5 +385,114 @@ public class SinglyLinkedListTest {
         list.add(5, 0);
         List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50, 0});
         assertEquals(expected, list);
+    }
+
+    @Test
+    public void subListEmpty() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 0);
+        List<Integer> expected = new ArrayList<>();
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListSingle() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 1);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListFull() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, source.size());
+        assertEquals(source, copy);
+    }
+
+    @Test
+    public void subListStarts() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(0, 3);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{10, 20, 30});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListEnds() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(2, source.size());
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{30, 40, 50});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void subListMiddle() {
+        List<Integer> source = new SinglyLinkedList<>(new Integer[]{10, 20, 30, 40, 50});
+        List<Integer> copy = source.subList(2, 3);
+        List<Integer> expected = new SinglyLinkedList<>(new Integer[]{30});
+        assertEquals(expected, copy);
+    }
+
+    @Test
+    public void createStackEmpty() {
+        Stack<Integer> stack = new SinglyLinkedList<>();
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+        assertThrows(EmptyStackException.class, stack::peek);
+        assertThrows(EmptyStackException.class, stack::pop);
+    }
+
+    @Test
+    public void createStack() {
+        Stack<Integer> stack = new SinglyLinkedList<>();
+        Integer value = 14;
+
+        assertSame(value, stack.push(value));
+        assertFalse(stack.isEmpty());
+        assertEquals(1, stack.size());
+        assertSame(value, stack.peek());
+        assertEquals(1, stack.size());
+
+        assertSame(value, stack.pop());
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+        assertThrows(EmptyStackException.class, stack::peek);
+        assertThrows(EmptyStackException.class, stack::pop);
+    }
+
+    @Test
+    public void createStackFromArray() {
+        Integer first = 100;
+        Integer second = 200;
+        Integer third = 300;
+        Stack<Integer> stack = new SinglyLinkedList<>(new Integer[]{first, second, third});
+        assertEquals(3, stack.size());
+
+        assertSame(first, stack.pop());
+        assertEquals(2, stack.size());
+        assertSame(second, stack.pop());
+        assertEquals(1, stack.size());
+        assertSame(third, stack.pop());
+        assertTrue(stack.isEmpty());
+        assertEquals(0, stack.size());
+    }
+
+    @Test
+    public void stackSeveralPushes() {
+        Integer first = 100;
+        Integer second = 200;
+        Integer third = 300;
+        Stack<Integer> stack = new SinglyLinkedList<>();
+
+        assertSame(first, stack.push(first));
+        assertSame(second, stack.push(second));
+        assertSame(third, stack.push(third));
+
+        assertSame(third, stack.peek());
+        assertSame(third, stack.pop());
+        assertSame(second, stack.pop());
+        assertSame(first, stack.pop());
+        assertTrue(stack.isEmpty());
     }
 }

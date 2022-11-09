@@ -1,15 +1,17 @@
 package lab_1;
 
 import java.util.Comparator;
+import java.util.EmptyStackException;
 
-public class ArrayList<E> implements List<E> {
+public class ArrayList<E> implements List<E>, Stack<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private Object[] array;
-    private int size = 0;
+    private int size;
     private Comparator<E> comparator;
 
     public ArrayList() {
         array = new Object[DEFAULT_CAPACITY];
+        size = 0;
     }
 
     public ArrayList(int capacity) {
@@ -18,10 +20,11 @@ public class ArrayList<E> implements List<E> {
         }
         int finalCapacity = Math.max(DEFAULT_CAPACITY, capacity);
         array = new Object[finalCapacity];
+        size = 0;
     }
 
     public ArrayList(E[] elements) {
-        array = new Object[DEFAULT_CAPACITY];
+        this();
         ensureCapacity(elements.length);
 
         for (E e : elements) {
@@ -205,18 +208,42 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
+    public List<E> subList(int from, int to) {
+        int length = to - from;
+        ArrayList<E> created = new ArrayList<>(length);
+        Arrays.arrayCopy(array, from, created.array, 0, length);
+        created.size = length;
+        return created;
+    }
+
+    @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ArrayList{size=");
-        builder.append(size);
-        builder.append(", array=[");
-        for (int i = 0; i < size; i++) {
-            builder.append(array[i]);
-            if (i != size - 1) {
-                builder.append(", ");
-            }
+        return "ArrayList{" +
+                "size=" + size +
+                '}';
+    }
+
+    @Override
+    public E push(E item) {
+        add(item);
+        return item;
+    }
+
+    @Override
+    public E pop() {
+        if (size == 0) {
+            throw new EmptyStackException();
         }
-        builder.append("]}");
-        return builder.toString();
+        E item = get(size - 1);
+        remove(size - 1);
+        return item;
+    }
+
+    @Override
+    public E peek() {
+        if (size == 0) {
+            throw new EmptyStackException();
+        }
+        return get(size - 1);
     }
 }
