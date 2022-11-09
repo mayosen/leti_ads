@@ -55,25 +55,17 @@ class MergeSortTest {
 
     @Test
     void sort100() {
-        List<Integer> source = new ArrayList<>(readSample("src/main/resources/100.txt"));
+        List<Integer> source = new ArrayList<>(readSample("100.txt"));
         mergeSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/100_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("100_sorted.txt"));
         assertEquals(expected, source);
     }
 
     @Test
     void sort1000() {
-        List<Integer> source = new ArrayList<>(readSample("src/main/resources/1000.txt"));
+        List<Integer> source = new ArrayList<>(readSample("1000.txt"));
         mergeSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/1000_sorted.txt"));
-        assertEquals(expected, source);
-    }
-
-    @Test
-    void sort10000() {
-        List<Integer> source = new ArrayList<>(readSample("src/main/resources/10000.txt"));
-        mergeSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("src/main/resources/10000_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("1000_sorted.txt"));
         assertEquals(expected, source);
     }
 }

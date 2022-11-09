@@ -5,24 +5,23 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Utils {
+    private static final String TEST_RESOURCES = "src/test/resources/";
+
     public static void main(String[] args) {
         generateSampleFor(100);
-        generateSampleFor(500);
         generateSampleFor(1_000);
         generateSampleFor(5_000);
         generateSampleFor(10_000);
         generateSampleFor(50_000);
         generateSampleFor(100_000);
-        generateSampleFor(500_000);
-        generateSampleFor(1_000_000);
     }
 
     public static void generateSampleFor(int elements) {
         String name = String.valueOf(elements);
         int[] array = generateRandomNumbers(elements);
-        saveSample(name + ".txt", array);
+        saveSample(TEST_RESOURCES + name + ".txt", array);
         Arrays.sort(array);
-        saveSample(name + "_sorted.txt", array);
+        saveSample(TEST_RESOURCES + name + "_sorted.txt", array);
     }
 
     public static int[] generateRandomNumbers(int count) {
@@ -45,7 +44,7 @@ public class Utils {
     }
 
     public static Integer[] readSample(String name) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(TEST_RESOURCES + name))) {
             name = name.substring(name.lastIndexOf("/") + 1);
             name = name.substring(0, name.indexOf(".txt"));
             if (name.endsWith("_sorted")) {

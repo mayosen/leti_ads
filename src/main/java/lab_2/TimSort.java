@@ -15,27 +15,6 @@ public class TimSort {
         System.out.format(format + "\n", args);
     }
 
-    private static <T> String elementsString(List<T> list, int from, int to) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[");
-        for (int i = from; i < to; i++) {
-            builder.append(list.get(i));
-            if (i != to - 1) {
-                builder.append(", ");
-            }
-        }
-        builder.append("]");
-        return builder.toString();
-    }
-
-    private static <T> String elementsString(List<T> list, SubList subList) {
-        return elementsString(list, subList.start, subList.end);
-    }
-
-    private static <T> String elementsString(List<T> list) {
-        return elementsString(list, 0, list.size());
-    }
-
     public static <T> void timSort(List<T> list, Comparator<T> cmp) {
         Stack<SubList> stack = new ArrayList<>();
         int minRun = getMinRun(list.size());
@@ -66,7 +45,7 @@ public class TimSort {
 
             if (maxRun - start < minRun) {
                 maxRun = Math.min(start + minRun, list.size());
-                // log("run extended to: %d", maxRun);
+                // log("run extended to: %d", maxRun - start);
             }
 
             SubList subList = new SubList(start, maxRun);
@@ -151,7 +130,7 @@ public class TimSort {
                     merge(list, listY, listX, cmp);
                     stack.push(new SubList(listY.start, listX.end));
                 } else {
-                    // log("invariant is observed")
+                    // log("invariant is observed");
                     stack.push(listY);
                     stack.push(listX);
                 }
@@ -172,7 +151,7 @@ public class TimSort {
                         stack.push(listX);
                     }
                 } else {
-                    // log("invariant is observed")
+                    // log("invariant is observed");
                     stack.push(listZ);
                     stack.push(listY);
                     stack.push(listX);
