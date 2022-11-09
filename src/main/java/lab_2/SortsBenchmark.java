@@ -22,7 +22,12 @@ public class SortsBenchmark {
     private static final int WARMUPS = 2;
 
     public static void main(String[] args) throws IOException {
-        List<Integer> samples = new ArrayList<>(new Integer[]{1_000, 5_000, 10_000, 50_000, 100_000});
+        List<Integer> samples = new ArrayList<>(new Integer[]{
+                1_000, 5_000,
+                10_000, 50_000,
+                100_000, 500_000,
+                1_000_000, 3_000_000, 5_000_000
+        });
         List<ReportRow> rows = new ArrayList<>();
 
         for (int sample = 0; sample < samples.size(); sample++) {
@@ -30,7 +35,9 @@ public class SortsBenchmark {
             log.debug("#{} Test sample: {} elements", sample + 1, sampleSize);
             Integer[] source = readSample(sampleSize + ".txt");
             ReportRow row = new ReportRow(sampleSize);
-            row.insertionSort = testSort(source, "insertionSort", l -> InsertionSort.insertionSort(l, cmp));
+            if (sampleSize <= 100_000) {
+                row.insertionSort = testSort(source, "insertionSort", l -> InsertionSort.insertionSort(l, cmp));
+            }
             row.mergeSort = testSort(source, "mergeSort", l -> MergeSort.mergeSort(l, cmp));
             row.timSort = testSort(source, "timSort", l -> TimSort.timSort(l, cmp));
             rows.add(row);
@@ -50,7 +57,7 @@ public class SortsBenchmark {
 
     private static int testSort(Integer[] source, String name, Consumer<List<Integer>> sort) {
         long[] times = new long[ITERATIONS];
-        log.debug("Using sort {}", name);
+        log.debug("Using {}", name);
 
         for (int iteration = 0; iteration < WARMUPS; iteration++) {
             List<Integer> list = new ArrayList<>(source);

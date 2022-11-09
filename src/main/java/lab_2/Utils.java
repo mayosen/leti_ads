@@ -14,6 +14,10 @@ public class Utils {
         generateSampleFor(10_000);
         generateSampleFor(50_000);
         generateSampleFor(100_000);
+        generateSampleFor(500_000);
+        generateSampleFor(1_000_000);
+        generateSampleFor(3_000_000);
+        generateSampleFor(5_000_000);
     }
 
     public static void generateSampleFor(int elements) {
