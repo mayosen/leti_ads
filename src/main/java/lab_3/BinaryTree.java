@@ -64,11 +64,11 @@ public class BinaryTree {
      * @param node корневой элемент
      * @param consumer функция, которую нужно применить к каждому узлу
      */
-    public static void depthFirstTraversal(Node node, Consumer<Node> consumer) {
+    public static void depthFirstSearch(Node node, Consumer<Node> consumer) {
         if (node != null) {
             consumer.accept(node);
-            depthFirstTraversal(node.left, consumer);
-            depthFirstTraversal(node.right, consumer);
+            depthFirstSearch(node.left, consumer);
+            depthFirstSearch(node.right, consumer);
         }
     }
 }
