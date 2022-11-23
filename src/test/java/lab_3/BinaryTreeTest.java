@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lab_3.BinaryTree.Node;
-import static lab_3.BinaryTree.buildTree;
-import static lab_3.BinaryTree.depthFirstSearch;
+import static lab_3.BinaryTree.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BinaryTreeTest {
