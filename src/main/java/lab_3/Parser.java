@@ -75,10 +75,10 @@ public class Parser {
     }
 
     /**
-     * Рекурсивное чтение дерева.
+     * Рекурсивное чтение узла дерева.
      *
-     * @param parent родитель (нужен для создания двусторонней связи)
-     * @param isLeftChild является ли текущий узел левый потомком (иначе правый)
+     * @param parent родитель текущего узла (нужен для создания двусторонней связи)
+     * @param isLeftChild является ли текущий узел левым потомком (иначе правый)
      */
     private void parse(Node parent, boolean isLeftChild) {
         char current = chars[position];
