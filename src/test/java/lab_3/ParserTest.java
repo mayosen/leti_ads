@@ -3,7 +3,6 @@ package lab_3;
 import org.junit.jupiter.api.Test;
 
 import static lab_3.Parser.parse;
-import static lab_3.BinaryTree.Node;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {

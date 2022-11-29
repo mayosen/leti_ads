@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import static lab_3.BinaryTree.Node;
-
 public class Parser {
     private static final int OPENING = '(';
     private static final int CLOSING = ')';
