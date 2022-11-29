@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {
     @Test
-    void parseTop() {
+    void parseRoot() {
         String input = "(8)";
         Node root = parse(input);
         assertEquals(8, root.value);
@@ -19,7 +19,7 @@ class ParserTest {
 
     @Test
     void parseLeft() {
-        String input = "(8 (900) null)";
+        String input = "(8 (900) (null))";
         Node root = parse(input);
         assertEquals(8, root.value);
         assertNull(root.parent);
@@ -33,7 +33,7 @@ class ParserTest {
 
     @Test
     void parseRight() {
-        String input = "(8 null (1))";
+        String input = "(8 (null) (1))";
         Node root = parse(input);
         assertEquals(8, root.value);
         assertNull(root.parent);
@@ -53,7 +53,7 @@ class ParserTest {
         assertNull(root.parent);
 
         assertEquals(900, root.left.value);
-        assertSame(root, root.right.parent);
+        assertSame(root, root.left.parent);
         assertNull(root.left.left);
         assertNull(root.left.right);
 
@@ -65,7 +65,7 @@ class ParserTest {
 
     @Test
     void parseExample() {
-        String input = "(8 (9 (51) null) (1))";
+        String input = "(8 (9 (51) (null)) (1))";
         Node root = parse(input);
         assertEquals(8, root.value);
         assertNull(root.parent);
@@ -86,7 +86,7 @@ class ParserTest {
 
     @Test
     void parseLeftSubtree() {
-        String input = "(1 (2 (3 (4) null) (5 null (6))))";
+        String input = "(1 (2 (3 (4) (null)) (5 (null) (6))) (null))";
         Node root = parse(input);
         assertEquals(1, root.value);
         assertNull(root.parent);
@@ -117,7 +117,7 @@ class ParserTest {
 
     @Test
     void parseRightSubtree() {
-        String input = "(1 (2 (3 null (4)) (5 (6) null)))";
+        String input = "(1 (2 (3 (null) (4)) (5 (6) (null))) (null))";
         Node root = parse(input);
         assertEquals(1, root.value);
         assertNull(root.parent);
@@ -147,63 +147,80 @@ class ParserTest {
     }
 
     @Test
-    void illegalEmptyEntry() {
+    void emptyEntry() {
         String input = "";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalEmptyEntry2() {
+    void emptyEntryWithSpace() {
         String input = " (";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalTop() {
+    void unclosedRoot() {
         String input = "(8";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalTop2() {
+    void unclosedRoot2() {
         String input = "((8";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
     void illegalNull() {
-        String input = "(8 nope (4))";
+        String input = "(8 (nope) (4))";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalEmptyBracketsAsNull() {
-        String input = "(8 () 4)";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
-    }
-
-
-    @Test
-    void illegalEmptyBracketsAsNull2() {
-        String input = "(8 4 ())";
+    void nullWithoutBrackets() {
+        String input = "(8 null (4))";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalBracket() {
+    void emptyBracketsAsNullLeft() {
+        String input = "(8 () (4))";
+        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+    }
+
+    @Test
+    void emptyBracketsAsNullRight() {
+        String input = "(8 (4) ())";
+        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+    }
+
+    @Test
+    void illegalBrackets() {
         String input = "[8]";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
-    void illegalTree() {
-        String input = "((4 null (5))";
+    void treeWithoutRoot() {
+        String input = "((4 (null) (5))";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 
     @Test
     void illegalNodeValue() {
-        String input = "(4 (value) null)";
+        String input = "(4 (value) (null))";
+        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+    }
+
+    @Test
+    void unbalancedEntry() {
+        String input = "(1 (2 (3) (4)) (null)";
+        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+    }
+
+    @Test
+    void nullHasChildren() {
+        String input = "(1 (null (2) (3)) (4))";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));
     }
 }
