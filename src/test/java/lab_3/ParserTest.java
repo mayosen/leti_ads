@@ -146,6 +146,17 @@ class ParserTest {
     }
 
     @Test
+    void negativeValues() {
+        String input = "(0 (-1 (-2) (-100)) (400))";
+        Node root = parse(input);
+        assertEquals(0, root.value);
+        assertEquals(-1, root.left.value);
+        assertEquals(-2, root.left.left.value);
+        assertEquals(-100, root.left.right.value);
+        assertEquals(400, root.right.value);
+    }
+
+    @Test
     void emptyEntry() {
         String input = "";
         assertThrows(IllegalTreeEntry.class, () -> parse(input));

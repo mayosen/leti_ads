@@ -101,12 +101,20 @@ public class Parser {
             }
             return null;
 
-        } else if (Character.isDigit(current)) {
-            int value = Character.getNumericValue(current);
+        }
+
+        int sign = 1;
+        if (current == '-') {
+            sign = -1;
+            current = readChar(false);
+        }
+
+        if (Character.isDigit(current)) {
+            int value = sign * Character.getNumericValue(current);
             current = readChar(false);
 
             while (Character.isDigit(current)) {
-                value = 10 * value + Character.getNumericValue(current);
+                value = 10 * value + sign * Character.getNumericValue(current);
                 current = readChar(false);
             }
 
