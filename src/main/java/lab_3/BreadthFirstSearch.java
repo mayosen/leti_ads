@@ -17,14 +17,14 @@ public class BreadthFirstSearch {
         queue.add(root);
 
         while (!queue.isEmpty()) {
-            Node current = queue.get(0);
+            Node node = queue.get(0);
             queue.remove(0);
-            consumer.accept(current);
-            if (current.left != null) {
-                queue.add(current.left);
+            consumer.accept(node);
+            if (node.left != null) {
+                queue.add(node.left);
             }
-            if (current.right != null) {
-                queue.add(current.right);
+            if (node.right != null) {
+                queue.add(node.right);
             }
         }
     }
