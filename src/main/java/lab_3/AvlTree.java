@@ -32,6 +32,32 @@ public class AvlTree implements Tree {
         }
     }
 
+    // FIXME: Пока что забиваю на родителей. Посмотрим, нужно ли это вообще
+
+    static Node rotateLeft(Node node) {
+        Node child = node.right;
+        node.right = child.left;
+        child.left = node;
+        return child;
+    }
+
+    static Node rotateRight(Node node) {
+        Node child = node.left;
+        node.left = child.right;
+        child.right = node;
+        return child;
+    }
+
+    static Node rotateBigLeft(Node node) {
+        node.right = rotateRight(node.right);
+        return rotateLeft(node);
+    }
+
+    static Node rotateBigRight(Node node) {
+        node.left = rotateLeft(node.left);
+        return rotateRight(node);
+    }
+
     @Override
     public Node add(int value) {
         return null;

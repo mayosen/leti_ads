@@ -5,6 +5,64 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AvlTreeTest {
+    // TODO: Проверять родителей, если их не удалю
+
+    @Test
+    void rotateLeft() {
+        Node root = Parser.parse("(1 (2) (3 (4) (5)))");
+        Node rotated = AvlTree.rotateLeft(root);
+        assertEquals(3, rotated.value);
+        assertEquals(1, rotated.left.value);
+        assertEquals(2, rotated.left.left.value);
+        assertEquals(4, rotated.left.right.value);
+        assertEquals(5, rotated.right.value);
+    }
+
+    @Test
+    void rotateRight() {
+        Node root = Parser.parse("(1 (2 (4) (5)) (3))");
+        Node rotated = AvlTree.rotateRight(root);
+        assertEquals(2, rotated.value);
+        assertEquals(4, rotated.left.value);
+        assertEquals(1, rotated.right.value);
+        assertEquals(5, rotated.right.left.value);
+        assertEquals(3, rotated.right.right.value);
+    }
+
+    @Test
+    void rotateBigLeft() {
+        Node root = Parser.parse("(1 (2) (3 (4 (6) (7)) (5)))");
+        Node rotated = AvlTree.rotateBigLeft(root);
+        assertEquals(4, rotated.value);
+        assertEquals(1, rotated.left.value);
+        assertEquals(2, rotated.left.left.value);
+        assertEquals(6, rotated.left.right.value);
+        assertEquals(3, rotated.right.value);
+        assertEquals(7, rotated.right.left.value);
+        assertEquals(5, rotated.right.right.value);
+    }
+
+    @Test
+    void rotateBigRight() {
+        Node root = Parser.parse("(1 (2 (4) (5 (6) (7))) (3))");
+        Node rotated = AvlTree.rotateBigRight(root);
+        assertEquals(5, rotated.value);
+        assertEquals(2, rotated.left.value);
+        assertEquals(4, rotated.left.left.value);
+        assertEquals(6, rotated.left.right.value);
+        assertEquals(1, rotated.right.value);
+        assertEquals(7, rotated.right.left.value);
+        assertEquals(3, rotated.right.right.value);
+    }
+
+
+
+
+
+
+
+
+
     // TODO: Проверить добавление с помощью BFS
 
     @Test
