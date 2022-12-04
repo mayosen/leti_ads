@@ -1,7 +1,7 @@
 package lab_3;
 
 public class AvlTree implements Tree {
-    private Node root;
+    Node root;
 
     public AvlTree() {
         this.root = null;
@@ -9,7 +9,7 @@ public class AvlTree implements Tree {
 
     public AvlTree(Node root) {
         this.root = root;
-        // TODO: Балансировка
+        // TODO: Балансировка и исправить в тестах
     }
 
     @Override
@@ -27,7 +27,42 @@ public class AvlTree implements Tree {
         } else {
             throw new DuplicatedValueException(value);
         }
+        updateHeight(node);
+        return balance(node);
+    }
+
+    static void updateHeight(Node node) {
+        int leftHeight = getHeight(node.left);
+        int rightHeight = getHeight(node.right);
+        node.height = Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    static int getHeight(Node node) {
+        return node != null ? node.height : -1;
+    }
+
+    static Node balance(Node node) {
+        int balanceFactor = getBalanceFactor(node);
+
+        if (balanceFactor == -2) {
+            if (getBalanceFactor(node.left) <= 0) {
+                node = rotateRight(node);
+            } else {
+                node = rotateBigRight(node);
+            }
+        } else if (balanceFactor == 2) {
+            if (getBalanceFactor(node.right) >= 0) {
+                node = rotateLeft(node);
+            } else {
+                node = rotateBigLeft(node);
+            }
+        }
+
         return node;
+    }
+
+    static int getBalanceFactor(Node node) {
+        return getHeight(node.right) - getHeight(node.left);
     }
 
     static Node rotateLeft(Node node) {
@@ -58,20 +93,6 @@ public class AvlTree implements Tree {
         return rotateRight(node);
     }
 
-    static int height(Node node) {
-        return node != null ? node.height : -1;
-    }
-
-    static void updateHeight(Node node) {
-        int leftHeight = height(node.left);
-        int rightHeight = height(node.right);
-        node.height = Math.max(leftHeight, rightHeight) + 1;
-    }
-
-    static int getBalanceFactor(Node node) {
-        return height(node.right) - height(node.left);
-    }
-
     @Override
     public Node search(int value) {
         Node node = root;
@@ -92,5 +113,9 @@ public class AvlTree implements Tree {
     @Override
     public Node remove(int value) {
         return null;
+    }
+
+    Node getRoot() {
+        return root;
     }
 }
