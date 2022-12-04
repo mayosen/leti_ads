@@ -65,7 +65,7 @@ public class Parser {
                 return null;
             }
 
-            Node node = new Node(parent, value);
+            Node node = new Node(value);
 
             if (current == CLOSING) {
                 balance--;

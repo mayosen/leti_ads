@@ -3,9 +3,9 @@ package lab_3;
 import java.util.function.Consumer;
 
 public interface Tree {
-    Node add(int value);
+    void insert(int value);
 
-    Node find(int value);
+    Node search(int value);
 
     Node remove(int value);
 

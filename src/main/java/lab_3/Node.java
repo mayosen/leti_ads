@@ -3,22 +3,23 @@ package lab_3;
 import java.util.Objects;
 
 public class Node {
-    Node parent;
     Node left;
     Node right;
     int value;
+    int height;
 
-    public Node(Node parent, int value) {
-        this.parent = parent;
+    public Node(int value) {
         this.left = null;
         this.right = null;
         this.value = value;
+        this.height = 0;
     }
 
     @Override
     public String toString() {
         return "Node{" +
                 "value=" + value +
+                ", height=" + height +
                 '}';
     }
 

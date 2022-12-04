@@ -3,41 +3,42 @@ package lab_3;
 import java.util.function.Consumer;
 
 public class AvlTree implements Tree {
-    private AvlNode root;
+    private Node root;
 
     public AvlTree() {
         this.root = null;
     }
 
     public AvlTree(Node root) {
-        this.root = new AvlNode(null, root.value, 1);
+        this.root = new Node(root.value);
         // TODO: Строить дерево по данному
         // breadthFirstSearch(node -> add(node.value));
     }
 
-    static class AvlNode extends Node {
-        int height;
-
-        public AvlNode(Node parent, int value, int height) {
-            super(parent, value);
-            this.height = height;
-        }
-
-        @Override
-        public String toString() {
-            return "AvlNode{" +
-                    "value=" + value +
-                    ", height=" + height +
-                    '}';
-        }
+    @Override
+    public void insert(int value) {
+        root = insert(value, root);
     }
 
-    // FIXME: Пока что забиваю на родителей. Посмотрим, нужно ли это вообще
+    private Node insert(int value, Node node) {
+        if (node == null) {
+            node = new Node(value);
+        } else if (value < node.value) {
+            node.left = insert(value, node.left);
+        } else if (value > node.value) {
+            node.right = insert(value, node.right);
+        } else {
+            throw new DuplicatedValueException(value);
+        }
+        return node;
+    }
 
     static Node rotateLeft(Node node) {
         Node child = node.right;
         node.right = child.left;
         child.left = node;
+        updateHeight(node);
+        updateHeight(child);
         return child;
     }
 
@@ -45,6 +46,8 @@ public class AvlTree implements Tree {
         Node child = node.left;
         node.left = child.right;
         child.right = node;
+        updateHeight(node);
+        updateHeight(child);
         return child;
     }
 
@@ -58,22 +61,31 @@ public class AvlTree implements Tree {
         return rotateRight(node);
     }
 
-    @Override
-    public Node add(int value) {
-        return null;
+    static int height(Node node) {
+        return node != null ? node.height : -1;
+    }
+
+    static void updateHeight(Node node) {
+        int leftHeight = height(node.left);
+        int rightHeight = height(node.right);
+        node.height = Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    static int getBalanceFactor(Node node) {
+        return height(node.right) - height(node.left);
     }
 
     @Override
-    public Node find(int value) {
-        Node current = root;
+    public Node search(int value) {
+        Node node = root;
 
-        while (current != null) {
-            if (value == current.value) {
-                return current;
-            } else if (value < current.value) {
-                current = current.left;
+        while (node != null) {
+            if (value == node.value) {
+                return node;
+            } else if (value < node.value) {
+                node = node.left;
             } else {
-                current = current.right;
+                node = node.right;
             }
         }
 

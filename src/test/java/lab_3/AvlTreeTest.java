@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AvlTreeTest {
-    // TODO: Проверять родителей, если их не удалю
-
     @Test
     void rotateLeft() {
         Node root = Parser.parse("(1 (2) (3 (4) (5)))");
