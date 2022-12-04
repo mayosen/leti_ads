@@ -99,10 +99,7 @@ class AvlTreeTest {
 
     @Test
     void insertWithRotatingLeft() {
-        AvlTree tree = new AvlTree();
-        tree.insert(1);
-        tree.insert(2);
-        tree.insert(3);
+        AvlTree tree = AvlTree.of(1, 2, 3);
         Node root = tree.getRoot();
         assertEquals(2, root.value);
         assertEquals(1, root.left.value);
@@ -111,10 +108,7 @@ class AvlTreeTest {
 
     @Test
     void insertWithRotatingRight() {
-        AvlTree tree = new AvlTree();
-        tree.insert(3);
-        tree.insert(2);
-        tree.insert(1);
+        AvlTree tree = AvlTree.of(3, 2, 1);
         Node root = tree.getRoot();
         assertEquals(2, root.value);
         assertEquals(1, root.left.value);
@@ -123,13 +117,7 @@ class AvlTreeTest {
 
     @Test
     void insertWithRotatingBigLeft() {
-        AvlTree tree = new AvlTree();
-        tree.insert(10);
-        tree.insert(20);
-        tree.insert(30);
-        tree.insert(29);
-        tree.insert(31);
-        tree.insert(28);
+        AvlTree tree = AvlTree.of(10, 20, 30, 29, 31, 28);
         Node root = tree.getRoot();
         assertEquals(29, root.value);
         assertEquals(20, root.left.value);
@@ -141,13 +129,7 @@ class AvlTreeTest {
 
     @Test
     void insertWithRotatingBigRight() {
-        AvlTree tree = new AvlTree();
-        tree.insert(30);
-        tree.insert(20);
-        tree.insert(10);
-        tree.insert(9);
-        tree.insert(11);
-        tree.insert(12);
+        AvlTree tree = AvlTree.of(30, 20, 10, 9, 11, 12);
         Node root = tree.getRoot();
         assertEquals(11, root.value);
         assertEquals(10, root.left.value);
@@ -158,6 +140,58 @@ class AvlTreeTest {
     }
 
     @Test
-    void remove() {
+    void deleteFromEmptyTree() {
+        AvlTree tree = new AvlTree();
+        assertNull(tree.getRoot());
+    }
+
+    @Test
+    void deleteNotExisting() {
+        AvlTree tree = AvlTree.of(30, 20, 10);
+        Node root = tree.getRoot();
+        assertEquals(20, root.value);
+        assertEquals(10, root.left.value);
+        assertEquals(30, root.right.value);
+    }
+
+    @Test
+    void deleteSingleRoot() {
+        AvlTree tree = AvlTree.of(30);
+        tree.delete(30);
+        assertNull(tree.getRoot());
+    }
+
+    @Test
+    void deleteRoot() {
+        AvlTree tree = AvlTree.of(30, 20, 10);
+        tree.delete(20);
+        Node root = tree.getRoot();
+        assertEquals(30, root.value);
+        assertEquals(10, root.left.value);
+    }
+
+    @Test
+    void deleteInSimpleCase() {
+        AvlTree tree = AvlTree.of(30, 20, 10, 9, 11, 12, 21);
+        tree.delete(20);
+        Node root = tree.getRoot();
+        assertEquals(11, root.value);
+        assertEquals(10, root.left.value);
+        assertEquals(9, root.left.left.value);
+        assertEquals(21, root.right.value);
+        assertEquals(12, root.right.left.value);
+        assertEquals(30, root.right.right.value);
+    }
+    @Test
+    void deleteWithBalancing() {
+        AvlTree tree = AvlTree.of(30, 20, 10, 9, 11, 12, 21);
+        tree.delete(10);  // left rotation
+        Node root = tree.getRoot();
+        assertEquals(20, root.value);
+        assertEquals(11, root.left.value);
+        assertEquals(9, root.left.left.value);
+        assertEquals(12, root.left.right.value);
+        assertEquals(30, root.right.value);
+        assertEquals(21, root.right.left.value);
     }
 }

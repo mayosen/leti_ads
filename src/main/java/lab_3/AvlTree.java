@@ -1,15 +1,23 @@
 package lab_3;
 
 public class AvlTree implements Tree {
-    Node root;
+    private Node root;
 
     public AvlTree() {
-        this.root = null;
+        root = null;
     }
 
-    public AvlTree(Node root) {
-        this.root = root;
-        // TODO: Балансировка и исправить в тестах
+    public AvlTree(Node otherRoot) {
+        root = null;
+        BreadthFirstSearch.search(otherRoot, node -> insert(node.value));
+    }
+
+    public static AvlTree of(int... values) {
+        AvlTree tree = new AvlTree();
+        for (int value : values) {
+            tree.insert(value);
+        }
+        return tree;
     }
 
     @Override
@@ -17,7 +25,7 @@ public class AvlTree implements Tree {
         root = insert(value, root);
     }
 
-    private Node insert(int value, Node node) {
+    private static Node insert(int value, Node node) {
         if (node == null) {
             node = new Node(value);
         } else if (value < node.value) {
@@ -31,17 +39,17 @@ public class AvlTree implements Tree {
         return balance(node);
     }
 
-    static void updateHeight(Node node) {
+    private static void updateHeight(Node node) {
         int leftHeight = getHeight(node.left);
         int rightHeight = getHeight(node.right);
         node.height = Math.max(leftHeight, rightHeight) + 1;
     }
 
-    static int getHeight(Node node) {
+    private static int getHeight(Node node) {
         return node != null ? node.height : -1;
     }
 
-    static Node balance(Node node) {
+    private static Node balance(Node node) {
         int balanceFactor = getBalanceFactor(node);
 
         if (balanceFactor == -2) {
@@ -61,7 +69,7 @@ public class AvlTree implements Tree {
         return node;
     }
 
-    static int getBalanceFactor(Node node) {
+    private static int getBalanceFactor(Node node) {
         return getHeight(node.right) - getHeight(node.left);
     }
 
@@ -96,7 +104,6 @@ public class AvlTree implements Tree {
     @Override
     public Node search(int value) {
         Node node = root;
-
         while (node != null) {
             if (value == node.value) {
                 return node;
@@ -106,13 +113,44 @@ public class AvlTree implements Tree {
                 node = node.right;
             }
         }
-
         return null;
     }
 
     @Override
-    public Node remove(int value) {
-        return null;
+    public void delete(int value) {
+        root = delete(value, root);
+    }
+
+    private static Node delete(int value, Node node) {
+        if (node == null) {
+            return null;
+        } else if (value < node.value) {
+            node.left = delete(value, node.left);
+        } else if (value > node.value) {
+            node.right = delete(value, node.right);
+        } else {
+            if (node.left == null && node.right == null) {
+                return null;
+            } else if (node.left == null) {
+                node = node.right;
+            } else if (node.right == null) {
+                node = node.left;
+            } else {
+                Node leastMax = findLeastGreater(node.right);
+                node.value = leastMax.value;
+                node.right = delete(leastMax.value, node.right);
+            }
+        }
+
+        updateHeight(node);
+        return balance(node);
+    }
+
+    private static Node findLeastGreater(Node node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 
     Node getRoot() {

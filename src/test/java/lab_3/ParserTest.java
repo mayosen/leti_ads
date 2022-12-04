@@ -115,78 +115,78 @@ class ParserTest {
     @Test
     void emptyEntry() {
         String input = "";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void emptyEntryWithSpace() {
         String input = " (";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void unclosedRoot() {
         String input = "(8";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void unclosedRoot2() {
         String input = "((8";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void illegalNull() {
         String input = "(8 (nope) (4))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void nullWithoutBrackets() {
         String input = "(8 null (4))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void emptyBracketsAsNullLeft() {
         String input = "(8 () (4))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void emptyBracketsAsNullRight() {
         String input = "(8 (4) ())";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void illegalBrackets() {
         String input = "[8]";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void treeWithoutRoot() {
         String input = "((4 (null) (5))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void illegalNodeValue() {
         String input = "(4 (value) (null))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void unbalancedEntry() {
         String input = "(1 (2 (3) (4)) (null)";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 
     @Test
     void nullHasChildren() {
         String input = "(1 (null (2) (3)) (4))";
-        assertThrows(IllegalTreeEntry.class, () -> parse(input));
+        assertThrows(IllegalTreeException.class, () -> parse(input));
     }
 }

@@ -5,5 +5,5 @@ public interface Tree {
 
     Node search(int value);
 
-    Node remove(int value);
+    void delete(int value);
 }

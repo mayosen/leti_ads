@@ -40,7 +40,7 @@ public class Parser {
             Parser parser = new Parser(reader);
             Node root = parser.parseNode(null);
             if (parser.balance != 0) {
-                throw new IllegalTreeEntry("Скобки не сбалансированы");
+                throw new IllegalTreeException("Скобки не сбалансированы");
             }
             return root;
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public class Parser {
 
             if (value == null) {
                 if (current != CLOSING) {
-                    throw new IllegalTreeEntry("null не может иметь детей");
+                    throw new IllegalTreeException("null не может иметь детей");
                 }
                 balance--;
                 return null;
@@ -76,15 +76,15 @@ public class Parser {
                 node.right = parseNode(node);
                 current = readChar(true);
                 if (current != CLOSING) {
-                    throw new IllegalTreeEntry("Ожидался символ ')'");
+                    throw new IllegalTreeException("Ожидался символ ')'");
                 }
                 balance--;
                 return node;
             } else {
-                throw new IllegalTreeEntry("Ожидался символ '(' или ')'");
+                throw new IllegalTreeException("Ожидался символ '(' или ')'");
             }
         } else {
-            throw new IllegalTreeEntry("Узел должен начинаться с '('");
+            throw new IllegalTreeException("Узел должен начинаться с '('");
         }
     }
 
@@ -97,7 +97,7 @@ public class Parser {
             flag &= readChar(false) == 'l';
 
             if (!flag) {
-                throw new IllegalTreeEntry("Неверная запись null узла");
+                throw new IllegalTreeException("Неверная запись null узла");
             }
             return null;
 
@@ -122,7 +122,7 @@ public class Parser {
             return value;
 
         } else {
-            throw new IllegalTreeEntry("Некорректное значение узла");
+            throw new IllegalTreeException("Некорректное значение узла");
         }
     }
 
