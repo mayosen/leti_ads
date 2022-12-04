@@ -1,7 +1,5 @@
 package lab_3;
 
-import java.util.function.Consumer;
-
 public class AvlTree implements Tree {
     private Node root;
 
@@ -10,9 +8,8 @@ public class AvlTree implements Tree {
     }
 
     public AvlTree(Node root) {
-        this.root = new Node(root.value);
-        // TODO: Строить дерево по данному
-        // breadthFirstSearch(node -> add(node.value));
+        this.root = root;
+        // TODO: Балансировка
     }
 
     @Override
@@ -95,15 +92,5 @@ public class AvlTree implements Tree {
     @Override
     public Node remove(int value) {
         return null;
-    }
-
-    @Override
-    public void depthFirstSearch(Consumer<Node> consumer) {
-        DepthFirstSearch.searchPreOrder(root, consumer);
-    }
-
-    @Override
-    public void breadthFirstSearch(Consumer<Node> consumer) {
-        BreadthFirstSearch.search(root, consumer);
     }
 }
