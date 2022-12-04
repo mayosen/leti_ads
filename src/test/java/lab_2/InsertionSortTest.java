@@ -87,17 +87,17 @@ class InsertionSortTest {
 
     @Test
     void sort100() {
-        List<Integer> source = new ArrayList<>(readSample("100.txt"));
+        List<Integer> source = new ArrayList<>(readSample("lab_1/100.txt"));
         insertionSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("100_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("lab_1/100_sorted.txt"));
         assertEquals(expected, source);
     }
 
     @Test
     void sort1000() {
-        List<Integer> source = new ArrayList<>(readSample("1000.txt"));
+        List<Integer> source = new ArrayList<>(readSample("lab_1/1000.txt"));
         insertionSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("1000_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("lab_1/1000_sorted.txt"));
         assertEquals(expected, source);
     }
 }
