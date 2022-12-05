@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 public class Defence {
     public static void main(String[] args) {
-        List<Kruskal.Edge> treeEdges = getSpanningTreeFromFile("input2.txt");
+        List<Kruskal.Edge> treeEdges = buildTreeFromFile("input2.txt");
         MergeSort.mergeSort(treeEdges, Comparator.comparing(Kruskal.Edge::getEdgeString));
         int totalWeight = 0;
         for (int i = 0; i < treeEdges.size(); i++) {
@@ -21,9 +21,9 @@ public class Defence {
         System.out.println(totalWeight);
     }
 
-    public static List<Kruskal.Edge> getSpanningTreeFromFile(String filename) {
+    public static List<Kruskal.Edge> buildTreeFromFile(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            return Kruskal.getSpanningTree(reader);
+            return Kruskal.buildTree(reader);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();

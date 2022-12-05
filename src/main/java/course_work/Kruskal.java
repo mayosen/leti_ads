@@ -27,7 +27,13 @@ public class Kruskal {
         }
     }
 
-    public static List<Edge> getSpanningTree(BufferedReader reader) throws IOException {
+    /**
+     * Построение минимального остовного дерева для графа по алгоритму Краскала.
+     *
+     * @param reader источник матрицы смежности
+     * @return список ребер, составляющих минимальное остовное дерево.
+     */
+    public static List<Edge> buildTree(BufferedReader reader) throws IOException {
         return new Kruskal(reader).buildTree();
     }
 
@@ -36,12 +42,12 @@ public class Kruskal {
         DisjointSet set = new ArrayDisjointSet(vertices.size());
         List<Edge> tree = new ArrayList<>();
 
-        for (int i = 0; i < edges.size() && tree.size() < vertices.size(); i++) {
+        for (int i = 0; i < edges.size(); i++) {
             Edge edge = edges.get(i);
-            int firstSet = set.find(edge.firstVertex);
-            int secondSet = set.find(edge.secondVertex);
-            if (firstSet != secondSet) {
-                set.union(firstSet, secondSet);
+            int a = set.find(edge.firstVertex);
+            int b = set.find(edge.secondVertex);
+            if (a != b) {
+                set.union(a, b);
                 tree.add(edge);
             }
         }
@@ -80,7 +86,7 @@ public class Kruskal {
         }
 
         public String getEdgeString() {
-            return vertices.get(firstVertex) + vertices.get(secondVertex);
+            return vertices.get(firstVertex) + '-' + vertices.get(secondVertex);
         }
     }
 }

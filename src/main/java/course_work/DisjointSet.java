@@ -5,5 +5,5 @@ public interface DisjointSet {
 
     int find(int value);
 
-    void union(int first, int second);
+    void union(int a, int b);
 }
