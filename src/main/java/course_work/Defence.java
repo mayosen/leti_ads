@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 public class Defence {
     public static void main(String[] args) {
-        List<Kruskal.Edge> treeEdges = buildTreeFromFile("input2.txt");
+        List<Kruskal.Edge> treeEdges = buildTreeFromFile("input.txt");
         MergeSort.mergeSort(treeEdges, Comparator.comparing(Kruskal.Edge::getEdgeString));
         int totalWeight = 0;
         for (int i = 0; i < treeEdges.size(); i++) {
