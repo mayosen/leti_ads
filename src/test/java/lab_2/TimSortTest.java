@@ -229,17 +229,17 @@ class TimSortTest {
 
     @Test
     void sort100() {
-        List<Integer> source = new ArrayList<>(readSample("lab_1/100.txt"));
+        List<Integer> source = new ArrayList<>(readSample("lab_2/100.txt"));
         timSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("lab_1/100_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("lab_2/100_sorted.txt"));
         assertEquals(expected, source);
     }
 
     @Test
     void sort1000() {
-        List<Integer> source = new ArrayList<>(readSample("lab_1/1000.txt"));
+        List<Integer> source = new ArrayList<>(readSample("lab_2/1000.txt"));
         timSort(source, cmp);
-        List<Integer> expected = new ArrayList<>(readSample("lab_1/1000_sorted.txt"));
+        List<Integer> expected = new ArrayList<>(readSample("lab_2/1000_sorted.txt"));
         assertEquals(expected, source);
     }
 }
