@@ -1,0 +1,5 @@
+*.txt
+!100.txt
+!1000.txt
+!100_sorted.txt
+!1000_sorted.txt
