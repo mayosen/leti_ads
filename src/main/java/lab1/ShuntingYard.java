@@ -1,32 +1,24 @@
 package lab1;
 
 import java.util.EmptyStackException;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 public class ShuntingYard {
-    public static final String NUMBER_REGEX = "\\d+(/\\d+)?";
-    public static final String FUNCTION_REGEX = "sin|cos";
-    private static final String DELIMITER = " ";
-    private static final List<String> operators = new ArrayList<>(new String[]{"^", "*", "/", "+", "-"});
-    /*
-    private static final Map<String, Integer> operators = Map.of(
+    static final String NUMBER_REGEX = "\\d+(/\\d+)?";
+    static final String FUNCTION_REGEX = "sin|cos|round";
+    static final String ARGUMENT_DELIMITER = ",";
+    static final String DELIMITER = " ";
+    static final String OPENING = "(";
+    static final String CLOSING = ")";
+    static final Map<String, Integer> operators = Map.of(
             "^", 100,
             "*", 50,
             "/", 50,
             "+", 10,
             "-", 10
     );
-    */
-
-    private static int getPriority(String token) {
-        return switch (token) {
-            case "^" -> 100;
-            case "*", "/" -> 50;
-            case "+", "-" -> 10;
-            default -> throw new IllegalArgumentException();
-        };
-    }
 
     public static String run(String input) {
         StringTokenizer tokenizer = new StringTokenizer(input, DELIMITER);
@@ -43,43 +35,59 @@ public class ShuntingYard {
             } else if (Pattern.matches(FUNCTION_REGEX, token)) {
                 stack.push(token);
 
-            } else if (operators.contains(token)) {
-                String op;
-                while (!stack.isEmpty() && operators.contains(op = stack.peek())) {
-                    int tokenPriority = getPriority(token);
-                    int operatorPriority = getPriority(op);
+            } else if (Pattern.matches(ARGUMENT_DELIMITER, token)) {
+                try {
+                    while (true) {
+                        if (!stack.peek().equals(OPENING)) {
+                            builder.append(stack.pop());
+                            builder.append(DELIMITER);
+                        } else {
+                            break;
+                        }
+                    }
 
-                    if (operatorPriority >= tokenPriority) {
+                } catch (EmptyStackException e) {
+                    throw new IllegalArgumentException();
+                }
+
+            } else if (operators.containsKey(token)) {
+                String anotherOperator;
+
+                while (!stack.isEmpty() && operators.containsKey(anotherOperator = stack.peek())) {
+                    if (operators.get(anotherOperator) >= operators.get(token)) {
                         stack.pop();
-                        builder.append(op);
+                        builder.append(anotherOperator);
                         builder.append(DELIMITER);
                     } else {
                         break;
                     }
                 }
+
                 stack.push(token);
 
-            } else if (token.equals("(")) {
+            } else if (token.equals(OPENING)) {
                 stack.push(token);
 
-            } else if (token.equals(")")) {
+            } else if (token.equals(CLOSING)) {
                 try {
-                    while (!(stack.peek()).equals("(")) {
+                    while (!(stack.peek()).equals(OPENING)) {
                         builder.append(stack.pop());
                         builder.append(DELIMITER);
                     }
+
+                    if (!stack.pop().equals(OPENING)) {
+                        throw new IllegalArgumentException();
+                    }
+
+                    if (Pattern.matches(FUNCTION_REGEX, stack.peek())) {
+                        builder.append(stack.pop());
+                        builder.append(DELIMITER);
+                    }
+
                 } catch (EmptyStackException e) {
                     throw new IllegalArgumentException();
                 }
 
-                if (stack.peek().equals("(")) {
-                    stack.pop();
-                }
-
-                if (Pattern.matches(FUNCTION_REGEX, stack.peek())) {
-                    builder.append(stack.pop());
-                    builder.append(DELIMITER);
-                }
             } else {
                 throw new IllegalArgumentException();
             }
@@ -87,7 +95,7 @@ public class ShuntingYard {
 
         while (!stack.isEmpty()) {
             String token = stack.pop();
-            if (token.equals("(")) {
+            if (token.equals(OPENING)) {
                 throw new IllegalArgumentException();
             }
             builder.append(token);
